@@ -29,9 +29,9 @@
 				<configuration>
 					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
-						<Export-Package>org.pavanecce.cmmn.extensions</Export-Package>
-						<Bundle-SymbolicName>org.pavanecce.cmmn.extensions</Bundle-SymbolicName>
-						<Bundle-Name>org.pavanecce.cmmn.extensions</Bundle-Name>
+						<Export-Package>org.pavanecce.cmmn.cfa</Export-Package>
+						<Bundle-SymbolicName>org.pavanecce.cmmn.cfa</Bundle-SymbolicName>
+						<Bundle-Name>org.pavanecce.cmmn.cfa</Bundle-Name>
 					</instructions>
 				</configuration>
 			</plugin>
