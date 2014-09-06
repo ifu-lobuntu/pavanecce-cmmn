@@ -1,3 +1,4 @@
+[![Build Status](http://www.ifu-lobuntu.org:8080/job/pavanecce-cmmn/badge/icon)](http://www.ifu-lobuntu.org:8080/job/pavanecce-cmmn/)
 This project contains all the projects that implement the Pavanecce CMMN (Case Management Model and Notation) runtime. CMMN is a new modeling language that allows the development of highly adaptive, event driven, human-centric applications. If your are new to CMMN, please read this short [introduction](cmmn-intro.md).
 
 It consists of the following sub-projects:
