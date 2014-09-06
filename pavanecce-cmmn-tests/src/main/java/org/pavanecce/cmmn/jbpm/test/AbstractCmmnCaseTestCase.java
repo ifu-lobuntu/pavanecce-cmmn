@@ -328,7 +328,8 @@ public abstract class AbstractCmmnCaseTestCase extends JbpmJUnitBaseTestCase {
 			getTransaction().rollback();
 		} catch (Exception e) {
 		}
-		try (Connection c = ds.getConnection()) {
+		Connection c = ds.getConnection();
+		try {
 			c.createStatement().execute("SET REFERENTIAL_INTEGRITY FALSE");
 			ResultSet rst = c.createStatement().executeQuery("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = SCHEMA()");
 			while (rst.next()) {
@@ -337,6 +338,8 @@ public abstract class AbstractCmmnCaseTestCase extends JbpmJUnitBaseTestCase {
 			c.createStatement().execute("SET REFERENTIAL_INTEGRITY TRUE");
 		} catch (Exception e) {
 
+		} finally{
+			c.close();		
 		}
 		transaction = null;
 		if (isJpa) {

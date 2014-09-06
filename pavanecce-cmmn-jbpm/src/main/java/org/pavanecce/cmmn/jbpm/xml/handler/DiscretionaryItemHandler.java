@@ -22,7 +22,7 @@ public class DiscretionaryItemHandler extends AbstractTableItemHandler implement
 	@Override
 	public Object start(String uri, String localName, Attributes attrs, ExtensibleXmlParser parser) throws SAXException {
 		parser.startElementBuilder(localName, attrs);
-		DiscretionaryItem item = new DiscretionaryItem<>();
+		DiscretionaryItem item = new DiscretionaryItem();
 		item.setDefinitionRef(attrs.getValue("definitionRef"));
 		populateCommonItems(attrs, item);
 		String entry = attrs.getValue("entryCriteriaRefs");
