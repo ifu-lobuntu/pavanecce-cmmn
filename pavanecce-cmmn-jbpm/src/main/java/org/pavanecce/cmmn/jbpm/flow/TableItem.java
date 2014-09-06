@@ -53,7 +53,6 @@ public class TableItem extends AbstractItem implements CMMNElement {
 		return getPlannerRoles(spi.getDefinition().getPlanningTable(), spi.getPlanItemContainer().getPlanningTable());
 	}
 
-	@SafeVarargs
 	private static String getPlannerRoles(Collection<Role>... authorizedRoles) {
 		for (Collection<Role> collection : authorizedRoles) {
 			if (collection != null && !collection.isEmpty()) {
