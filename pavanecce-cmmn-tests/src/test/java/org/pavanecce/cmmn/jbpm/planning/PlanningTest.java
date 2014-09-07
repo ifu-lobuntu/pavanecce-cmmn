@@ -39,7 +39,6 @@ public class PlanningTest extends AbstractPlanItemInstanceContainerTest {
 				false);
 		for (PlannedTaskSummary plannedTaskSummary : pti.getPlannedTasks()) {
 			assertNull(plannedTaskSummary.getDiscretionaryItemId());
-			assertEquals(PlanningStatus.PLANNING_IN_PROGRESS, plannedTaskSummary.getPlanningStatus());
 		}
 		getPersistence().commit();
 		assertPlanItemDefinitionPresent(pti.getApplicableDiscretionaryItems(), "TheCaseTask");

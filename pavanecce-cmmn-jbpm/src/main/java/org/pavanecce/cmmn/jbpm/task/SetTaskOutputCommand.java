@@ -5,7 +5,6 @@ import java.util.Map;
 import org.jbpm.services.task.commands.TaskContext;
 import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
 import org.kie.api.task.model.Task;
-import org.kie.internal.command.Context;
 import org.kie.internal.task.api.model.InternalTaskData;
 
 public class SetTaskOutputCommand extends AbstractTaskCommand<Long> {
@@ -19,9 +18,7 @@ public class SetTaskOutputCommand extends AbstractTaskCommand<Long> {
 		this.outputAsMap = outputAsMap;
 	}
 
-	public Long execute(Context cntxt) {
-		TaskContext context = (TaskContext) cntxt;
-		init(context.getTaskService());
+	public Long execute(TaskContext context) {
 		Task task = ts.getTaskById(taskId);
 		InternalTaskData itd = (InternalTaskData) task.getTaskData();
 		itd.setOutputContentId(ensureContentPresent(task, itd.getOutputContentId(), outputAsMap, "Output"));

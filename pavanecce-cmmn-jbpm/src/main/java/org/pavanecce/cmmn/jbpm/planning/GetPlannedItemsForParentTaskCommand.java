@@ -23,11 +23,9 @@ public class GetPlannedItemsForParentTaskCommand extends AbstractPlanningCommand
 	}
 
 	@Override
-	public Collection<PlannedTaskSummary> execute(Context context) {
+	public Collection<PlannedTaskSummary> execute(TaskContext context) {
 		Collection<PlannedTaskSummary> result = new HashSet<PlannedTaskSummary>();
-		TaskServiceEntryPointImpl ts = ((TaskContext) context).getTaskService();
 		List<TaskSummary> sts = ts.getTaskQueryService().getSubTasksByParent(parentTaskId);
-		init(ts);
 		for (TaskSummary taskSummary : sts) {
 			PlannedTaskImpl pt = pm.find(PlannedTaskImpl.class, taskSummary.getId());
 			if (pt == null) {

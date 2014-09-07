@@ -7,6 +7,5 @@ public interface InternalPlannedTaskSummary extends InternalTaskSummary, Planned
 
 	void setPlanItemName(String name);
 
-	public void setPlanningStatus(PlanningStatus planningStatus);
 
 }

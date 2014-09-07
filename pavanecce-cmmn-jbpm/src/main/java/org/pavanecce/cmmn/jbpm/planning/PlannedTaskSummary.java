@@ -7,5 +7,4 @@ public interface PlannedTaskSummary extends TaskSummary {
 
 	String getPlanItemName();
 
-	public PlanningStatus getPlanningStatus();
 }

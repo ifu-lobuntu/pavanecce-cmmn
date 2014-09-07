@@ -8,10 +8,13 @@ public interface PlannedTask extends Task {
 
 	String getDiscretionaryItemId();
 
-	PlanningStatus getPlanningStatus();
-
 	public abstract String getPlanItemName();
 
+	@Deprecated()
+	/**
+	 * Need to come up with passByReference/passByValue solution for GWT
+	 * @return
+	 */
 	Map<String, Object> getParameterOverrides();
 
 }

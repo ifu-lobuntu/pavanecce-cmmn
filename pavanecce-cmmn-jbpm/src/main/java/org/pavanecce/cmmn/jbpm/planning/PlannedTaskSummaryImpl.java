@@ -18,7 +18,6 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 	private Long id;
 	private InternalTaskSummary taskSummary;
 	private String discretionaryItemId;
-	private PlanningStatus planningStatus;
 	private String planItemName;
 
 	public PlannedTaskSummaryImpl() {
@@ -34,7 +33,6 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 		this.id = pt.getId();
 		this.discretionaryItemId = pt.getDiscretionaryItemId();
 		this.planItemName = pt.getPlanItemName();
-		this.planningStatus = pt.getPlanningStatus();
 	}
 
 	public String getDiscretionaryItemId() {
@@ -45,10 +43,6 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 		this.discretionaryItemId = tableItemId;
 	}
 
-	public PlanningStatus getPlanningStatus() {
-		return planningStatus;
-	}
-
 	@Override
 	public String getPlanItemName() {
 		return planItemName;
@@ -57,10 +51,6 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 	@Override
 	public void setPlanItemName(String name) {
 		this.planItemName = name;
-	}
-
-	public void setPlanningStatus(PlanningStatus planningStatus) {
-		this.planningStatus = planningStatus;
 	}
 
 	public long getId() {
@@ -129,7 +119,6 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 
 	public void writeExternal(ObjectOutput out) throws IOException {
 		out.writeLong(id);
-		out.writeObject(planningStatus);
 		out.writeUTF(discretionaryItemId);
 		out.writeUTF(planItemName);
 		taskSummary.writeExternal(out);
@@ -137,7 +126,6 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 
 	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 		id = in.readLong();
-		planningStatus = (PlanningStatus) in.readObject();
 		discretionaryItemId = in.readUTF();
 		planItemName = in.readUTF();
 		taskSummary = new TaskSummaryImpl();

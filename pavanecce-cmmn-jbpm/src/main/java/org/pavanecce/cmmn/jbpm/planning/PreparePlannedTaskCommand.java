@@ -24,13 +24,11 @@ public class PreparePlannedTaskCommand extends AbstractPlanningCommand<PlannedTa
 	}
 
 	@Override
-	public PlannedTask execute(Context context) {
-		ts = ((TaskContext) context).getTaskService();
+	public PlannedTask execute(TaskContext context) {
 		long processInstanceId = ts.getTaskById(parentTaskId).getTaskData().getProcessInstanceId();
 		RuntimeEngine runtime = runtimeManager.getRuntimeEngine(ProcessInstanceIdContext.get(processInstanceId));
 		CaseInstance ci = (CaseInstance) runtime.getKieSession().getProcessInstance(processInstanceId);
 		WorkItem wi = ci.createPlannedItem(getWorkItemId(parentTaskId), discretionaryItemId);
-		init(ts);
 		return pm.find(PlannedTaskImpl.class, ts.getTaskByWorkItemId(wi.getId()).getId());
 	}
 }

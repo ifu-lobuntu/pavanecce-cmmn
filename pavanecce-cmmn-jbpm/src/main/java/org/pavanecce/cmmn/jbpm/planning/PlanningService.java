@@ -66,8 +66,7 @@ public class PlanningService {
 			private static final long serialVersionUID = -6636279175990254543L;
 
 			@Override
-			public PlannedTask execute(Context context) {
-				init(((TaskContext) context).getTaskService());
+			public PlannedTask execute(TaskContext context) {
 				return pm.find(PlannedTaskImpl.class, id);
 			}
 		});

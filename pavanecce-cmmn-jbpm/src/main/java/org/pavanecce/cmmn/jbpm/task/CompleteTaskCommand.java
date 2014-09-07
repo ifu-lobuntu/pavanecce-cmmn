@@ -12,7 +12,6 @@ import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
 import org.kie.api.task.model.Status;
 import org.kie.api.task.model.Task;
 import org.kie.api.task.model.User;
-import org.kie.internal.command.Context;
 import org.kie.internal.task.api.model.InternalTaskData;
 
 /**
@@ -31,9 +30,7 @@ public class CompleteTaskCommand extends SetTaskOutputCommand {
 	}
 
 	@SuppressWarnings("serial")
-	public Long execute(Context cntxt) {
-		TaskContext c = (TaskContext) cntxt;
-		init(c.getTaskService());
+	public Long execute(TaskContext c) {
 		Task task = ts.getTaskQueryService().getTaskInstanceById(taskId);
 		if (task == null) {
 			throw new IllegalStateException("There is no Task with the provided Id = " + taskId);
@@ -50,7 +47,7 @@ public class CompleteTaskCommand extends SetTaskOutputCommand {
 			// CHeck for potential Owner allowed (decorator?)
 			((InternalTaskData) task.getTaskData()).setStatus(Status.Completed);
 		}
-		super.execute(cntxt);
+		super.execute(c);
 
 		ts.getTaskLifecycleEventListeners().select(new AnnotationLiteral<AfterTaskCompletedEvent>() {
 		}).fire(task);

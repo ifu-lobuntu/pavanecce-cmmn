@@ -5,12 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jbpm.services.task.commands.TaskCommand;
+import org.jbpm.services.task.commands.TaskContext;
 import org.jbpm.services.task.impl.TaskServiceEntryPointImpl;
 import org.jbpm.services.task.impl.model.ContentDataImpl;
 import org.jbpm.services.task.impl.model.ContentImpl;
 import org.jbpm.services.task.utils.ContentMarshallerHelper;
 import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
 import org.kie.api.task.model.Task;
+import org.kie.internal.command.Context;
 import org.kie.internal.task.api.ContentMarshallerContext;
 
 public abstract class AbstractTaskCommand<T> extends TaskCommand<T> {
@@ -23,12 +25,19 @@ public abstract class AbstractTaskCommand<T> extends TaskCommand<T> {
 		super();
 		this.pm = pm;
 	}
-
-	public void init(TaskServiceEntryPointImpl ts) {
-		// TODO Won't work in CDI
+	public abstract T execute(TaskContext context);
+	@Override
+	public final T execute(Context context) {
+		TaskContext taskContext = (TaskContext) context;
+		init(taskContext.getTaskService());
+		return execute(taskContext);
+	}
+	
+	private void init(TaskServiceEntryPointImpl ts) {
 		try {
 			this.ts = ts;
 			if (pm == null) {
+				// TODO Won't work in CDI
 				Field pmField = ts.getTaskAdminService().getClass().getDeclaredField("pm");
 				pmField.setAccessible(true);
 				pm = (JbpmServicesPersistenceManager) pmField.get(ts.getTaskAdminService());

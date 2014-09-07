@@ -24,8 +24,7 @@ public class MakeDiscretionaryItemAvailableCommand extends AbstractPlanningComma
 	}
 
 	@Override
-	public Void execute(Context context) {
-		ts = ((TaskContext) context).getTaskService();
+	public Void execute(TaskContext context) {
 		long processInstanceId = ts.getTaskById(parentTaskId).getTaskData().getProcessInstanceId();
 		RuntimeEngine runtime = runtimeManager.getRuntimeEngine(ProcessInstanceIdContext.get(processInstanceId));
 		CaseInstance ci = (CaseInstance) runtime.getKieSession().getProcessInstance(processInstanceId);

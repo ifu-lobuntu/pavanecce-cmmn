@@ -12,7 +12,6 @@ import org.jbpm.services.task.events.BeforeTaskAddedEvent;
 import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
 import org.kie.api.task.model.Status;
 import org.kie.api.task.model.Task;
-import org.kie.internal.command.Context;
 import org.kie.internal.task.api.model.InternalTaskData;
 
 public class CreateTaskCommand extends AbstractTaskCommand<Long> {
@@ -29,9 +28,7 @@ public class CreateTaskCommand extends AbstractTaskCommand<Long> {
 	}
 
 	@SuppressWarnings("serial")
-	public Long execute(Context cntxt) {
-		TaskContext context = (TaskContext) cntxt;
-		init(context.getTaskService());
+	public Long execute(TaskContext context) {
 		ts.getTaskLifecycleEventListeners().select(new AnnotationLiteral<BeforeTaskAddedEvent>() {
 		}).fire(task);
 		((InternalTaskData) task.getTaskData()).setStatus(Status.Created);

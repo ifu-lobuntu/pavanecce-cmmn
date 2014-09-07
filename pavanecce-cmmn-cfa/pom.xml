@@ -16,6 +16,11 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>pavanecce-cmmn-jbpm</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>${environment.artifactId}</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
@@ -29,6 +34,10 @@
 				<configuration>
 					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
+						<Import-Package>
+						  org.pavanecce.cmmn.jbpm.lifecycle,
+						  org.pavanecce.cmmn.jbpm.task
+						</Import-Package>
 						<Export-Package>org.pavanecce.cmmn.cfa</Export-Package>
 						<Bundle-SymbolicName>org.pavanecce.cmmn.cfa</Bundle-SymbolicName>
 						<Bundle-Name>org.pavanecce.cmmn.cfa</Bundle-Name>

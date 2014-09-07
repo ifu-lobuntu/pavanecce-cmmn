@@ -33,8 +33,6 @@ public class PlannedTaskImpl implements InternalPlannedTask {
 	TaskImpl task;
 	@Column(name = "discretionary_item_id")
 	private String discretionaryItemId;
-	@Enumerated
-	PlanningStatus planningStatus;
 	@Basic
 	private String planItemName;
 	@Transient
@@ -48,8 +46,6 @@ public class PlannedTaskImpl implements InternalPlannedTask {
 		this.task = task;
 		this.id = task.getId();
 		planItemName = task.getNames().get(0).getText();
-		planningStatus = PlanningStatus.PLANNING_IN_PROGRESS;
-
 	}
 
 	public TaskImpl getTask() {
@@ -63,15 +59,6 @@ public class PlannedTaskImpl implements InternalPlannedTask {
 	@Override
 	public void setDiscretionaryItemId(String tableItemId) {
 		this.discretionaryItemId = tableItemId;
-	}
-
-	public PlanningStatus getPlanningStatus() {
-		return planningStatus;
-	}
-
-	@Override
-	public void setPlanningStatus(PlanningStatus planningStatus) {
-		this.planningStatus = planningStatus;
 	}
 
 	public void writeExternal(ObjectOutput out) throws IOException {
