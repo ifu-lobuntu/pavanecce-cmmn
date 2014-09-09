@@ -166,8 +166,8 @@ public class CaseInstance extends RuleFlowProcessInstance implements CaseInstanc
 	}
 
 	@Override
-	public void start() {
-		super.start();
+	public void start(String trigger) {
+		super.start(trigger);
 		updateSubscriptions();
 		maybeExecuteWorkItem();
 	}

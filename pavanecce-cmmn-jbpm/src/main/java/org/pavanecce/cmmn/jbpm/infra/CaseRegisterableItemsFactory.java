@@ -20,13 +20,13 @@ public class CaseRegisterableItemsFactory extends DefaultRegisterableItemsFactor
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected WorkItemHandler getHTWorkItemHandler(RuntimeEngine runtime) {
-		ExternalTaskEventListener listener = new CaseTaskLifecycleListener();
-		listener.setRuntimeManager(((RuntimeEngineImpl) runtime).getManager());
+		CaseTaskLifecycleListener listener = new CaseTaskLifecycleListener();
+//		listener.setRuntimeManager(((RuntimeEngineImpl) runtime).getManager());
 
 		LocalHTWorkItemHandler humanTaskHandler = new CaseTaskWorkItemHandler();
 		humanTaskHandler.setRuntimeManager(((RuntimeEngineImpl) runtime).getManager());
 		if (runtime.getTaskService() instanceof EventService) {
-			((EventService) runtime.getTaskService()).registerTaskLifecycleEventListener(listener);
+			((EventService) runtime.getTaskService()).registerTaskEventListener(listener);
 		}
 
 		if (runtime instanceof Disposable) {
@@ -35,8 +35,7 @@ public class CaseRegisterableItemsFactory extends DefaultRegisterableItemsFactor
 				@Override
 				public void onDispose(RuntimeEngine runtime) {
 					if (runtime.getTaskService() instanceof EventService) {
-						((EventService) runtime.getTaskService()).clearTaskLifecycleEventListeners();
-						((EventService) runtime.getTaskService()).clearTasknotificationEventListeners();
+						((EventService) runtime.getTaskService()).clearTaskEventListeners();
 					}
 				}
 			});

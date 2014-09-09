@@ -169,10 +169,6 @@ public class PlannedTaskImpl implements InternalPlannedTask {
 		task.setFormName(formName);
 	}
 
-	public Short getArchived() {
-		return task.getArchived();
-	}
-
 	public int hashCode() {
 		return task.hashCode();
 	}
@@ -209,5 +205,35 @@ public class PlannedTaskImpl implements InternalPlannedTask {
 			parameterOverrides = new HashMap<String, Object>();
 		}
 		return parameterOverrides;
+	}
+
+	@Override
+	public String getName() {
+		return task.getName();
+	}
+
+	@Override
+	public String getSubject() {
+		return task.getSubject();
+	}
+
+	@Override
+	public String getDescription() {
+		return task.getDescription();
+	}
+
+	@Override
+	public void setName(String name) {
+		task.setName(name);
+	}
+
+	@Override
+	public void setSubject(String subject) {
+		task.setSubject(subject);
+	}
+
+	@Override
+	public void setDescription(String description) {
+		task.setDescription(description);
 	}
 }

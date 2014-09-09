@@ -36,17 +36,19 @@ import org.drools.core.marshalling.impl.ClassObjectMarshallingStrategyAcceptor;
 import org.drools.core.marshalling.impl.SerializablePlaceholderResolverStrategy;
 import org.jbpm.marshalling.impl.ProcessInstanceResolverStrategy;
 import org.jbpm.marshalling.impl.ProcessMarshallerRegistry;
-import org.jbpm.process.audit.NodeInstanceLog;
+import org.jbpm.process.audit.JPAAuditLogService;
+import org.jbpm.process.audit.strategy.PersistenceStrategy;
+import org.jbpm.process.audit.strategy.StandaloneJtaStrategy;
 import org.jbpm.process.builder.ProcessNodeBuilderRegistry;
 import org.jbpm.process.instance.ProcessInstanceFactoryRegistry;
 import org.jbpm.process.instance.event.DefaultSignalManagerFactory;
 import org.jbpm.process.instance.impl.DefaultProcessInstanceManagerFactory;
 import org.jbpm.ruleflow.core.RuleFlowProcess;
+import org.jbpm.runtime.manager.impl.factory.LocalTaskServiceFactory;
 import org.jbpm.services.task.identity.JBossUserGroupCallbackImpl;
 import org.jbpm.services.task.identity.PropertyUserInfoImpl;
 import org.jbpm.services.task.impl.model.GroupImpl;
 import org.jbpm.services.task.impl.model.UserImpl;
-import org.jbpm.shared.services.impl.JbpmServicesPersistenceManagerImpl;
 import org.jbpm.test.JbpmJUnitBaseTestCase;
 import org.jbpm.workflow.instance.NodeInstanceContainer;
 import org.jbpm.workflow.instance.impl.NodeInstanceFactoryRegistry;
@@ -62,6 +64,7 @@ import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.manager.RuntimeEngine;
 import org.kie.api.runtime.manager.RuntimeEnvironmentBuilder;
 import org.kie.api.runtime.manager.RuntimeManager;
+import org.kie.api.runtime.manager.audit.NodeInstanceLog;
 import org.kie.api.runtime.process.NodeInstance;
 import org.kie.api.task.TaskService;
 import org.kie.api.task.model.TaskSummary;
@@ -122,6 +125,7 @@ import org.pavanecce.common.util.FileUtil;
 import org.pavanecce.common.util.ObjectPersistence;
 import org.pavanecce.common.util.Stopwatch;
 
+import bitronix.tm.jndi.BitronixContext;
 //import test.ConstructionCase;
 //import test.House;
 //import test.HousePlan;
@@ -132,6 +136,10 @@ import org.pavanecce.common.util.Stopwatch;
 import bitronix.tm.resource.jdbc.PoolingDataSource;
 
 public abstract class AbstractCmmnCaseTestCase extends JbpmJUnitBaseTestCase {
+	static{
+		System.setProperty(InitialContext.INITIAL_CONTEXT_FACTORY, bitronix.tm.jndi.BitronixInitialContextFactory.class.getName());
+		System.setProperty(InitialContext.URL_PKG_PREFIXES, "bitronix.tm.jndi");
+	}
 	protected ObjectPersistence persistence;
 	protected boolean isJpa = false;
 	private static ObjectContentManagerFactory objectContentManagerFactory;
@@ -224,7 +232,7 @@ public abstract class AbstractCmmnCaseTestCase extends JbpmJUnitBaseTestCase {
 			names.add(nodeName);
 		}
 		if (sessionPersistence) {
-			List<NodeInstanceLog> logs = getLogService().findNodeInstances(processInstanceId);
+			List<? extends NodeInstanceLog> logs = getLogService().findNodeInstances(processInstanceId);
 			if (logs != null) {
 				for (NodeInstanceLog l : logs) {
 					String nodeName = l.getNodeName();
@@ -304,7 +312,7 @@ public abstract class AbstractCmmnCaseTestCase extends JbpmJUnitBaseTestCase {
 
 	public UserTransaction getTransaction() throws NamingException {
 		if (transaction == null) {
-			transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
+			transaction = (UserTransaction) new BitronixContext().lookup("java:comp/UserTransaction");
 		}
 		return transaction;
 	}
@@ -351,10 +359,6 @@ public abstract class AbstractCmmnCaseTestCase extends JbpmJUnitBaseTestCase {
 
 		persistence = null;
 
-		Field fl = JbpmServicesPersistenceManagerImpl.class.getDeclaredField("noScopeEmLocal");
-		fl.setAccessible(true);
-		ThreadLocal<?> l = (ThreadLocal<?>) fl.get(null);
-		l.set(null);
 		if (jcrSession != null) {
 			removeChildren(jcrSession, "/cases");
 			removeChildren(jcrSession, "/subscriptions");
@@ -478,7 +482,7 @@ public abstract class AbstractCmmnCaseTestCase extends JbpmJUnitBaseTestCase {
 		for (Map.Entry<String, ResourceType> entry : resources.entrySet()) {
 			builder.addAsset(ResourceFactory.newClassPathResource(entry.getKey()), entry.getValue());
 		}
-
+		
 		return createRuntimeManager(strategy, resources, builder.get(), identifier);
 	}
 
@@ -501,6 +505,7 @@ public abstract class AbstractCmmnCaseTestCase extends JbpmJUnitBaseTestCase {
 		RuntimeManager rm = super.createRuntimeManager(processFile);
 		this.runtimeManager = rm;
 		RuntimeEngine runtimeEngine = getRuntimeEngine();
+		fixPersistenceStrategy(runtimeEngine);
 		Environment env = runtimeEngine.getKieSession().getEnvironment();
 		prepareEnvironment(env);
 		NodeInstanceFactoryRegistry nodeInstanceFactoryRegistry = NodeInstanceFactoryRegistry.getInstance(env);
@@ -524,11 +529,46 @@ public abstract class AbstractCmmnCaseTestCase extends JbpmJUnitBaseTestCase {
 		if (ts instanceof InternalTaskService) {
 			InternalTaskService its = (InternalTaskService) ts;
 			its.addMarshallerContext(rm.getIdentifier(), new ContentMarshallerContext(env, getClass().getClassLoader()));
-			its.setUserInfo(new PropertyUserInfoImpl(new Properties()));
+//			its.setUserInfo(new PropertyUserInfoImpl(new Properties()));
 		}
 		// for some reason the task service does not persist the users and groups ???
 		populateUsers();
 		return rm;
+	}
+	//temporary fix for bug in STandaloneJTa...STrategy
+	private void fixPersistenceStrategy(RuntimeEngine runtimeEngine) {
+		try {
+			JPAAuditLogService jas = (JPAAuditLogService) runtimeEngine.getAuditLogService();
+			Field field = JPAAuditLogService.class.getDeclaredField("persistenceStrategy");
+			field.setAccessible(true);
+			final PersistenceStrategy ps=(PersistenceStrategy) field.get(jas);
+			field.set(jas, new PersistenceStrategy() {
+				
+				@Override
+				public void leaveTransaction(EntityManager em, Object transaction) {
+					if(transaction!=null){
+						ps.leaveTransaction(em, transaction);
+					}
+				}
+				
+				@Override
+				public Object joinTransaction(EntityManager em) {
+					return ps.joinTransaction(em);
+				}
+				
+				@Override
+				public EntityManager getEntityManager() {
+					return ps.getEntityManager();
+				}
+				
+				@Override
+				public void dispose() {
+					ps.dispose();
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected void prepareEnvironment(Environment env) {
@@ -542,6 +582,7 @@ public abstract class AbstractCmmnCaseTestCase extends JbpmJUnitBaseTestCase {
 		} else {
 			env.set(ObjectContentManagerFactory.OBJECT_CONTENT_MANAGER_FACTORY, getOcmFactory());
 		}
+		env.set("org.kie.internal.runtime.manager.TaskServiceFactory", LocalTaskServiceFactory.class.getName());
 	}
 
 	protected void populateUsers() {
@@ -649,6 +690,11 @@ public abstract class AbstractCmmnCaseTestCase extends JbpmJUnitBaseTestCase {
 		}
 		return jcrSession;
 	}
+    protected void clearHistory() {
+        if (sessionPersistence && getRuntimeManager() !=null && getRuntimeEngine()!=null && getRuntimeEngine().getAuditLogService()!=null) {
+        	getRuntimeEngine().getAuditLogService().clear();
+        }
+    }
 
 	@SuppressWarnings("rawtypes")
 	protected abstract Class[] getClasses();

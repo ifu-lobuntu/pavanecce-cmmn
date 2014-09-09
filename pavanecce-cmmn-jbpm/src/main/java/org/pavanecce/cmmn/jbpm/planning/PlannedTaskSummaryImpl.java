@@ -21,18 +21,33 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 	private String planItemName;
 
 	public PlannedTaskSummaryImpl() {
-
 	}
 
-	public PlannedTaskSummaryImpl(PlannedTaskImpl pt) {
-		this.taskSummary = new TaskSummaryImpl(pt.getId(), pt.getTaskData().getProcessInstanceId(), pt.getNames().get(0).getText(), pt.getSubjects().get(0)
-				.getText(), pt.getDescriptions().get(0).getText(), pt.getTaskData().getStatus(), pt.getPriority(), pt.getTaskData().isSkipable(), pt
-				.getTaskData().getActualOwner(), pt.getTaskData().getCreatedBy(), pt.getTaskData().getCreatedOn(), pt.getTaskData().getActivationTime(), pt
-				.getTaskData().getExpirationTime(), pt.getTaskData().getProcessId(), pt.getTaskData().getProcessSessionId(), pt.getSubTaskStrategy(), pt
-				.getTaskData().getParentId());
-		this.id = pt.getId();
-		this.discretionaryItemId = pt.getDiscretionaryItemId();
-		this.planItemName = pt.getPlanItemName();
+	public PlannedTaskSummaryImpl(InternalTaskSummary task,
+			String discretionaryItemId, String planItemName) {
+		this.taskSummary=task;
+		this.discretionaryItemId=discretionaryItemId;
+		this.planItemName=planItemName;
+	}
+	/**
+	 * @deprecated introduce a "transformer" method
+	 * @param task
+	 */
+	public PlannedTaskSummaryImpl(PlannedTaskImpl task) {
+		this(new TaskSummaryImpl(task.getId(), task.getName(),
+				task.getDescription(), task.getTaskData().getStatus(),
+				task.getPriority(),
+				(task.getTaskData().getActualOwner() != null) ? task
+						.getTaskData().getActualOwner().getId() : "", (task
+						.getTaskData().getCreatedBy() != null) ? task
+						.getTaskData().getCreatedBy().getId() : "", task
+						.getTaskData().getCreatedOn(), task.getTaskData()
+						.getActivationTime(), task.getTaskData()
+						.getExpirationTime(),
+				task.getTaskData().getProcessId(), task.getTaskData()
+						.getProcessInstanceId(), task.getTaskData()
+						.getParentId(), task.getTaskData().getDeploymentId()),task.getDiscretionaryItemId(),
+		task.getPlanItemName());
 	}
 
 	public String getDiscretionaryItemId() {
@@ -53,11 +68,11 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 		this.planItemName = name;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return taskSummary.getId();
 	}
 
-	public long getProcessInstanceId() {
+	public Long getProcessInstanceId() {
 		return taskSummary.getProcessInstanceId();
 	}
 
@@ -77,11 +92,11 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 		return taskSummary.getStatus();
 	}
 
-	public int getPriority() {
+	public Integer getPriority() {
 		return taskSummary.getPriority();
 	}
 
-	public boolean isSkipable() {
+	public Boolean isSkipable() {
 		return taskSummary.isSkipable();
 	}
 
@@ -109,7 +124,7 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 		return taskSummary.getProcessId();
 	}
 
-	public int getProcessSessionId() {
+	public Integer getProcessSessionId() {
 		return taskSummary.getProcessSessionId();
 	}
 
@@ -124,7 +139,8 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 		taskSummary.writeExternal(out);
 	}
 
-	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput in) throws IOException,
+			ClassNotFoundException {
 		id = in.readLong();
 		discretionaryItemId = in.readUTF();
 		planItemName = in.readUTF();
@@ -200,7 +216,7 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 		taskSummary.setSubTaskStrategy(subTaskStrategy);
 	}
 
-	public long getParentId() {
+	public Long getParentId() {
 		return taskSummary.getParentId();
 	}
 
@@ -210,6 +226,31 @@ public class PlannedTaskSummaryImpl implements InternalPlannedTaskSummary {
 
 	public void setPotentialOwners(List<String> potentialOwners) {
 		taskSummary.setPotentialOwners(potentialOwners);
+	}
+
+	@Override
+	public Boolean isQuickTaskSummary() {
+		return taskSummary.isQuickTaskSummary();
+	}
+
+	@Override
+	public String getStatusId() {
+		return taskSummary.getStatusId();
+	}
+
+	@Override
+	public String getActualOwnerId() {
+		return taskSummary.getActualOwnerId();
+	}
+
+	@Override
+	public String getCreatedById() {
+		return taskSummary.getCreatedById();
+	}
+
+	@Override
+	public String getDeploymentId() {
+		return taskSummary.getDeploymentId();
 	}
 
 }

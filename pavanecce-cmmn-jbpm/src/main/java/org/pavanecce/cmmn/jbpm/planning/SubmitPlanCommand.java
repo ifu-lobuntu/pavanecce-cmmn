@@ -1,16 +1,13 @@
 package org.pavanecce.cmmn.jbpm.planning;
 
 import java.util.Collection;
-import java.util.Map;
 
-import org.drools.core.common.InternalRuleBase;
-import org.drools.core.impl.KnowledgeBaseImpl;
+import org.drools.core.impl.InternalKnowledgeBase;
 import org.drools.core.process.instance.WorkItem;
 import org.drools.core.process.instance.WorkItemManager;
 import org.drools.persistence.PersistenceContext;
 import org.drools.persistence.PersistenceContextManager;
 import org.drools.persistence.info.WorkItemInfo;
-import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.EnvironmentName;
 import org.kie.api.runtime.manager.RuntimeEngine;
@@ -60,7 +57,7 @@ public class SubmitPlanCommand extends AbstractPlanningCommand<Void> {
 			Environment env = runtime.getKieSession().getEnvironment();
 			PersistenceContext pc = ((PersistenceContextManager) env.get(EnvironmentName.PERSISTENCE_CONTEXT_MANAGER)).getCommandScopedPersistenceContext();
 			WorkItemInfo wii = pc.findWorkItemInfo(wi.getId());
-			InternalRuleBase irb = (InternalRuleBase) ((KnowledgeBaseImpl) runtime.getKieSession().getKieBase()).getRuleBase();
+			InternalKnowledgeBase irb =  ((InternalKnowledgeBase) runtime.getKieSession().getKieBase());
 			wii.getWorkItem(env, irb).getParameters().putAll(plannedTask.getParameterOverrides());
 			wii.setId(wi.getId());
 			pc.merge(wii);

@@ -1,10 +1,8 @@
 package org.pavanecce.cmmn.jbpm.planning;
 
 import org.drools.core.process.instance.WorkItem;
-import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
 import org.kie.api.runtime.manager.RuntimeEngine;
 import org.kie.api.runtime.manager.RuntimeManager;
-import org.kie.internal.command.Context;
 import org.kie.internal.runtime.manager.context.ProcessInstanceIdContext;
 import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
 

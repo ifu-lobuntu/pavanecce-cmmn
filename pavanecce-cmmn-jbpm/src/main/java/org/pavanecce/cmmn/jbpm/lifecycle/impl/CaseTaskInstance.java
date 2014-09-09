@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.drools.core.RuntimeDroolsException;
 import org.jbpm.process.core.context.exception.ExceptionScope;
 import org.jbpm.process.instance.ContextInstanceContainer;
 import org.jbpm.process.instance.ProcessInstance;
@@ -86,7 +85,7 @@ public class CaseTaskInstance extends TaskPlanItemInstance<CaseTask, TaskItemWit
 			logger.error("Could not find process {}", processId);
 			logger.error("Aborting process");
 			((ProcessInstance) getProcessInstance()).setState(ProcessInstance.STATE_ABORTED);
-			throw new RuntimeDroolsException("Could not find process " + processId);
+			throw new RuntimeException("Could not find process " + processId);
 		} else {
 			List<ParameterMapping> parameterMappings = getItem().getDefinition().prepareInputMappings(process);
 			Map<String, Object> parametersToMap = ExpressionUtil.transformParameters(parameterMappings, getWorkItem().getParameters(), this);

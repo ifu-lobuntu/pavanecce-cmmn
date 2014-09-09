@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.jbpm.services.task.commands.CommandsUtil;
 import org.jbpm.services.task.exception.PermissionDeniedException;
-import org.jbpm.services.task.impl.TaskServiceEntryPointImpl;
 import org.kie.api.task.model.OrganizationalEntity;
 import org.kie.api.task.model.Status;
 import org.kie.api.task.model.Task;

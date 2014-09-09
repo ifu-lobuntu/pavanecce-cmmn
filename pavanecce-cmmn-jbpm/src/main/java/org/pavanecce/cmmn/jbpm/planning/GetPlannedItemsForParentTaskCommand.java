@@ -4,11 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import org.jbpm.services.task.impl.TaskServiceEntryPointImpl;
 import org.jbpm.services.task.impl.model.TaskImpl;
-import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
 import org.kie.api.task.model.TaskSummary;
-import org.kie.internal.command.Context;
 
 public class GetPlannedItemsForParentTaskCommand extends AbstractPlanningCommand<Collection<PlannedTaskSummary>> {
 	private final long parentTaskId;

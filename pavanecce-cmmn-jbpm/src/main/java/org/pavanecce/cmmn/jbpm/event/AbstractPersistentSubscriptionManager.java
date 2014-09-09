@@ -133,12 +133,9 @@ public abstract class AbstractPersistentSubscriptionManager<T extends CaseSubscr
 		eventQueue.set(new HashSet<CaseFileItemEventWrapper>());
 		if (eq.size() > 0) {
 			try {
-				// mmm.... desperate measures
-				Method m = JpaPersistenceContextManager.class.getDeclaredMethod("getInternalCommandScopedEntityManager");
-				m.setAccessible(true);
-				PersistenceContextManager pcm = (PersistenceContextManager) engine.getKieSession().getEnvironment()
+				JpaPersistenceContextManager pcm = (JpaPersistenceContextManager) engine.getKieSession().getEnvironment()
 						.get(EnvironmentName.PERSISTENCE_CONTEXT_MANAGER);
-				EntityManager em = (EntityManager) m.invoke(pcm);
+				EntityManager em = pcm.getCommandScopedEntityManager();
 				em.joinTransaction();
 				pcm.beginCommandScopedEntityManager();
 				for (CaseFileItemEventWrapper w : eq) {

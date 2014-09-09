@@ -6,28 +6,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jbpm.console.ng.ht.backend.server.TaskServiceEntryPointImpl;
 import org.jbpm.services.task.commands.TaskCommand;
 import org.jbpm.services.task.commands.TaskContext;
-import org.jbpm.services.task.impl.TaskServiceEntryPointImpl;
-import org.jbpm.services.task.impl.model.ContentDataImpl;
+import org.jbpm.services.task.events.TaskEventImpl;
+import org.jbpm.services.task.events.TaskEventSupport;
 import org.jbpm.services.task.impl.model.ContentImpl;
 import org.jbpm.services.task.utils.ContentMarshallerHelper;
-import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
-import org.jbpm.shared.services.impl.events.JbpmServicesEventImpl;
-import org.jbpm.shared.services.impl.events.JbpmServicesEventListener;
+import org.kie.api.task.TaskLifeCycleEventListener;
 import org.kie.api.task.model.Task;
 import org.kie.internal.command.Context;
 import org.kie.internal.task.api.ContentMarshallerContext;
 import org.kie.internal.task.api.TaskIdentityService;
 import org.kie.internal.task.api.TaskInstanceService;
+import org.kie.internal.task.api.TaskPersistenceContext;
 import org.kie.internal.task.api.TaskQueryService;
+import org.kie.internal.task.api.model.ContentData;
 import org.pavanecce.cmmn.jbpm.infra.CmmnTaskLifecycleEventListener;
 
 public abstract class AbstractTaskCommand<T> extends TaskCommand<T> {
 
 	private static final long serialVersionUID = -6267126920414609188L;
-	private JbpmServicesPersistenceManager pm;
-	private TaskServiceEntryPointImpl ts;
+	private TaskPersistenceContext pm;
+	private TaskContext ts;
 
 	public AbstractTaskCommand() {
 		super();
@@ -38,12 +39,12 @@ public abstract class AbstractTaskCommand<T> extends TaskCommand<T> {
 	@Override
 	public final T execute(Context context) {
 		TaskContext taskContext = (TaskContext) context;
-		init(taskContext.getTaskService());
+		init(taskContext);
 		return execute();
 	}
 
 	protected void addContent(Long id, Map<String, Object> params) {
-		ts.addContent(id, params);
+		ts.getTaskContentService().addContent(id, params);
 	}
 
 	protected void persist(Object o) {
@@ -59,11 +60,11 @@ public abstract class AbstractTaskCommand<T> extends TaskCommand<T> {
 	}
 
 	protected Task getTaskById(long taskId) {
-		return ts.getTaskById(taskId);
+		return ts.getTaskQueryService().getTaskInstanceById(taskId);
 	}
 
 	protected Task getTaskByWorkItemId(long id) {
-		return ts.getTaskByWorkItemId(id);
+		return ts.getTaskQueryService().getTaskByWorkItemId(id);
 	}
 
 	protected TaskIdentityService getTaskIdentityService() {
@@ -73,23 +74,14 @@ public abstract class AbstractTaskCommand<T> extends TaskCommand<T> {
 	protected TaskQueryService getTaskQueryService() {
 		return ts.getTaskQueryService();
 	}
-	protected TaskInstanceService getTaskInstanceService(){
+
+	protected TaskInstanceService getTaskInstanceService() {
 		return ts.getTaskInstanceService();
 	}
-	private void init(TaskServiceEntryPointImpl ts) {
-		try {
-			this.ts = ts;
-			if (pm == null) {
-				// TODO Won't work in CDI
-				Field pmField = ts.getTaskAdminService().getClass().getDeclaredField("pm");
-				pmField.setAccessible(true);
-				pm = (JbpmServicesPersistenceManager) pmField.get(ts.getTaskAdminService());
-			}
-		} catch (RuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+
+	private void init(TaskContext taskContext) {
+		this.pm = taskContext.getPersistenceContext();
+		this.ts = taskContext;
 	}
 
 	public final String toString() {
@@ -106,16 +98,16 @@ public abstract class AbstractTaskCommand<T> extends TaskCommand<T> {
 
 	protected long ensureContentPresent(Task task, long existingId, Map<String, Object> newContentAsMap, String contentNameInMap) {
 		ContentImpl existingContent = null;
-		ContentMarshallerContext mc = ts.getMarshallerContext(task);
+		ContentMarshallerContext mc = ts.getTaskContentService().getMarshallerContext(task);
 		if (existingId < 0 || (existingContent = pm.find(ContentImpl.class, existingId)) == null) {
 			Object correctContentObject = getCorrectContentObject(newContentAsMap, contentNameInMap);
-			ContentDataImpl contentData = ContentMarshallerHelper.marshal(correctContentObject, mc.getEnvironment());
+			ContentData contentData = ContentMarshallerHelper.marshal(correctContentObject, mc.getEnvironment());
 			ContentImpl newlyCreatedContent = new ContentImpl(contentData.getContent());
 			persist(newlyCreatedContent);
 			return newlyCreatedContent.getId();
 		} else {
 			Object contentObjectToUpdateTaskWith = mergeContentObjectIfPossible(newContentAsMap, contentNameInMap, existingContent, mc);
-			ContentDataImpl contentData = ContentMarshallerHelper.marshal(contentObjectToUpdateTaskWith, mc.getEnvironment());
+			ContentData contentData = ContentMarshallerHelper.marshal(contentObjectToUpdateTaskWith, mc.getEnvironment());
 			existingContent.setContent(contentData.getContent());
 			return existingContent.getId();
 		}
@@ -142,14 +134,28 @@ public abstract class AbstractTaskCommand<T> extends TaskCommand<T> {
 	}
 
 	private List<CmmnTaskLifecycleEventListener> getCmmnEventListeners() {
-		JbpmServicesEventImpl<Task> cdiEvent = (JbpmServicesEventImpl<Task>) ts.getTaskLifecycleEventListeners();
+		TaskEventSupport es = getTaskEventSupport();
 		List<CmmnTaskLifecycleEventListener> result = new ArrayList<CmmnTaskLifecycleEventListener>();
-		for (JbpmServicesEventListener<?> el : cdiEvent.getListeners()) {
+		for (TaskLifeCycleEventListener el : es.getEventListeners()) {
 			if (el instanceof CmmnTaskLifecycleEventListener) {
 				result.add((CmmnTaskLifecycleEventListener) el);
 			}
 		}
 		return result;
+	}
+
+	private TaskEventSupport getTaskEventSupport() {
+		TaskEventSupport es = null;
+		try {
+			Field esField = TaskContext.class.getDeclaredField("taskEventSupport");
+			esField.setAccessible(true);
+			es = (TaskEventSupport) esField.get(ts);
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return es;
 	}
 
 	protected void fireBeforeTaskStartedAutomaticallyEvent(Task t) {
@@ -177,26 +183,26 @@ public abstract class AbstractTaskCommand<T> extends TaskCommand<T> {
 	}
 
 	protected void fireBeforeTaskCompletedEvent(Task t) {
-		for (CmmnTaskLifecycleEventListener l : getCmmnEventListeners()) {
-			l.beforeTaskCompletedEvent(t);
+		for (TaskLifeCycleEventListener l : getTaskEventSupport().getEventListeners()) {
+			l.beforeTaskCompletedEvent(new TaskEventImpl(t, ts));
 		}
 	}
 
 	protected void fireAfterTaskCompletedEvent(Task t) {
-		for (CmmnTaskLifecycleEventListener l : getCmmnEventListeners()) {
-			l.afterTaskCompletedEvent(t);
+		for (TaskLifeCycleEventListener l : getTaskEventSupport().getEventListeners()) {
+			l.afterTaskCompletedEvent(new TaskEventImpl(t, ts));
 		}
 	}
 
 	protected void fireBeforeTaskAddedEvent(Task t) {
-		for (CmmnTaskLifecycleEventListener l : getCmmnEventListeners()) {
-			l.beforeTaskAddedEvent(t);
+		for (TaskLifeCycleEventListener l : getTaskEventSupport().getEventListeners()) {
+			l.beforeTaskAddedEvent(new TaskEventImpl(t, this.ts));
 		}
 	}
 
 	protected void fireAfterTaskAddedEvent(Task t) {
-		for (CmmnTaskLifecycleEventListener l : getCmmnEventListeners()) {
-			l.afterTaskAddedEvent(t);
+		for (TaskLifeCycleEventListener l : getTaskEventSupport().getEventListeners()) {
+			l.afterTaskAddedEvent(new TaskEventImpl(t, ts));
 		}
 	}
 

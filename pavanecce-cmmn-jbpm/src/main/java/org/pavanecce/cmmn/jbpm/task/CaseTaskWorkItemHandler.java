@@ -45,6 +45,7 @@ public class CaseTaskWorkItemHandler extends LocalHTWorkItemHandler {
 			List<I18NText> names = new ArrayList<I18NText>();
 			names.add(new I18NTextImpl("en-UK", taskName));
 			task.setNames(names);
+			task.setName(taskName);
 		}
 		// this should be replaced by FormName filled by designer
 		// TaskName shouldn't be trimmed if we are planning to use that for the task lists
@@ -63,6 +64,7 @@ public class CaseTaskWorkItemHandler extends LocalHTWorkItemHandler {
 		List<I18NText> subjects = new ArrayList<I18NText>();
 		subjects.add(new I18NTextImpl("en-UK", comment));
 		task.setSubjects(subjects);
+		task.setSubject(comment);
 		String priorityString = (String) workItem.getParameter("Priority");
 		int priority = 0;
 		if (priorityString != null) {

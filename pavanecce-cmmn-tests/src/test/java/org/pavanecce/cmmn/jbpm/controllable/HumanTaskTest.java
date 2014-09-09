@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.jbpm.services.task.audit.impl.model.BAMTaskSummaryImpl;
 import org.jbpm.services.task.utils.ContentMarshallerHelper;
 import org.kie.api.task.model.Content;
 import org.kie.api.task.model.Task;
@@ -18,6 +19,7 @@ import test.cmmn.WallPlan;
 public class HumanTaskTest extends AbstractControllableLifecycleTest {
 	{
 		super.isJpa = true;
+		BAMTaskSummaryImpl a;
 	}
 
 	public HumanTaskTest() {
