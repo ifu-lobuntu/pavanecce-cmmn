@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import org.jbpm.services.task.commands.TaskContext;
 import org.jbpm.services.task.impl.TaskServiceEntryPointImpl;
 import org.jbpm.services.task.impl.model.TaskImpl;
 import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
@@ -16,22 +15,22 @@ public class GetPlannedItemsForParentTaskCommand extends AbstractPlanningCommand
 	private final boolean createMissing;
 	private static final long serialVersionUID = -8445370954335088878L;
 
-	public GetPlannedItemsForParentTaskCommand(JbpmServicesPersistenceManager pm, long parentTaskId, boolean createMissing) {
-		super(pm);
+	public GetPlannedItemsForParentTaskCommand(long parentTaskId, boolean createMissing) {
+		super();
 		this.parentTaskId = parentTaskId;
 		this.createMissing = createMissing;
 	}
 
 	@Override
-	public Collection<PlannedTaskSummary> execute(TaskContext context) {
+	public Collection<PlannedTaskSummary> execute() {
 		Collection<PlannedTaskSummary> result = new HashSet<PlannedTaskSummary>();
-		List<TaskSummary> sts = ts.getTaskQueryService().getSubTasksByParent(parentTaskId);
+		List<TaskSummary> sts = getTaskQueryService().getSubTasksByParent(parentTaskId);
 		for (TaskSummary taskSummary : sts) {
-			PlannedTaskImpl pt = pm.find(PlannedTaskImpl.class, taskSummary.getId());
+			PlannedTaskImpl pt = find(PlannedTaskImpl.class, taskSummary.getId());
 			if (pt == null) {
-				pt = new PlannedTaskImpl(pm.find(TaskImpl.class, taskSummary.getId()));
+				pt = new PlannedTaskImpl(find(TaskImpl.class, taskSummary.getId()));
 				if (createMissing) {
-					pm.persist(pt);
+					persist(pt);
 				}
 			}
 			result.add(new PlannedTaskSummaryImpl(pt));

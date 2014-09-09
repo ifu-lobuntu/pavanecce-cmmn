@@ -56,7 +56,7 @@ public class UpdateTaskStatusWorkItemHandler implements WorkItemHandler {
 		String[] groupIds = gidString.split(System.getProperty("org.jbpm.ht.user.separator", ","));
 		if (transition == null) {
 			if (Boolean.TRUE.equals(workItem.getParameter(TaskParameters.SET_OUTPUT))) {
-				cmd = new SetTaskOutputCommand(null, task.getId(), workItem.getParameters());
+				cmd = new SetTaskOutputCommand(task.getId(), workItem.getParameters());
 			}
 		} else {
 			switch (transition) {
@@ -82,7 +82,7 @@ public class UpdateTaskStatusWorkItemHandler implements WorkItemHandler {
 				cmd = new SuspendTaskCommand(taskId, currentUserId);
 				break;
 			case COMPLETE:
-				cmd = new CompleteTaskCommand(null, taskId, currentUserId, workItem.getParameters());
+				cmd = new CompleteTaskCommand(taskId, currentUserId, workItem.getParameters());
 				break;
 			case ENABLE:
 				if (task.getTaskData().getStatus() == Status.Created) {

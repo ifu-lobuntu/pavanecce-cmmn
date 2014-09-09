@@ -1,6 +1,7 @@
 package org.pavanecce.cmmn.jbpm.planning;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.drools.core.common.InternalRuleBase;
 import org.drools.core.impl.KnowledgeBaseImpl;
@@ -9,7 +10,6 @@ import org.drools.core.process.instance.WorkItemManager;
 import org.drools.persistence.PersistenceContext;
 import org.drools.persistence.PersistenceContextManager;
 import org.drools.persistence.info.WorkItemInfo;
-import org.jbpm.services.task.commands.TaskContext;
 import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.EnvironmentName;
@@ -32,9 +32,8 @@ public class SubmitPlanCommand extends AbstractPlanningCommand<Void> {
 	private RuntimeManager runtimeManager;
 	private boolean resume;
 
-	public SubmitPlanCommand(RuntimeManager runtimeManager, JbpmServicesPersistenceManager pm, Collection<PlannedTask> plannedTasks, long parentTaskId,
-			boolean resume) {
-		super(pm);
+	public SubmitPlanCommand(RuntimeManager runtimeManager, Collection<PlannedTask> plannedTasks, long parentTaskId, boolean resume) {
+		super();
 		this.plannedTasks = plannedTasks;
 		this.parentTaskId = parentTaskId;
 		this.runtimeManager = runtimeManager;
@@ -42,15 +41,15 @@ public class SubmitPlanCommand extends AbstractPlanningCommand<Void> {
 	}
 
 	@Override
-	public Void execute(TaskContext context) {
-		Task parentTask = ts.getTaskById(parentTaskId);
+	public Void execute() {
+		Task parentTask = getTaskById(parentTaskId);
 		long workItemId = parentTask.getTaskData().getWorkItemId();
 		RuntimeEngine runtime = runtimeManager.getRuntimeEngine(ProcessInstanceIdContext.get(parentTask.getTaskData().getProcessInstanceId()));
 		CaseInstance ci = (CaseInstance) runtime.getKieSession().getProcessInstance(parentTask.getTaskData().getProcessInstanceId());
 		for (PlannedTask plannedTask : plannedTasks) {
-			pm.merge(plannedTask);
-			ts.addContent(plannedTask.getId(), plannedTask.getParameterOverrides());
-			Task currentTask = ts.getTaskById(plannedTask.getId());
+			merge(plannedTask);
+			addContent(plannedTask.getId(), plannedTask.getParameterOverrides());
+			Task currentTask = getTaskById(plannedTask.getId());
 			InternalTaskData td = (InternalTaskData) currentTask.getTaskData();
 			td.setActualOwner(plannedTask.getTaskData().getActualOwner());
 			if (!currentTask.getPeopleAssignments().getPotentialOwners().contains(td.getActualOwner())) {
@@ -86,4 +85,5 @@ public class SubmitPlanCommand extends AbstractPlanningCommand<Void> {
 		}
 		return null;
 	}
+
 }

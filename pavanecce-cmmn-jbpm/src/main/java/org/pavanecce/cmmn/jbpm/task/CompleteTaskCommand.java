@@ -2,13 +2,7 @@ package org.pavanecce.cmmn.jbpm.task;
 
 import java.util.Map;
 
-import javax.enterprise.util.AnnotationLiteral;
-
-import org.jbpm.services.task.commands.TaskContext;
-import org.jbpm.services.task.events.AfterTaskCompletedEvent;
-import org.jbpm.services.task.events.BeforeTaskCompletedEvent;
 import org.jbpm.services.task.exception.PermissionDeniedException;
-import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
 import org.kie.api.task.model.Status;
 import org.kie.api.task.model.Task;
 import org.kie.api.task.model.User;
@@ -23,21 +17,19 @@ public class CompleteTaskCommand extends SetTaskOutputCommand {
 
 	private static final long serialVersionUID = -1817334359933358605L;
 
-	public CompleteTaskCommand(JbpmServicesPersistenceManager pm, long taskId, String userId, Map<String, Object> data) {
-		super(pm, taskId, data);
+	public CompleteTaskCommand(long taskId, String userId, Map<String, Object> data) {
+		super(taskId, data);
 		this.taskId = taskId;
 		this.userId = userId;
 	}
 
-	@SuppressWarnings("serial")
-	public Long execute(TaskContext c) {
-		Task task = ts.getTaskQueryService().getTaskInstanceById(taskId);
+	public Long execute() {
+		Task task = getTaskQueryService().getTaskInstanceById(taskId);
 		if (task == null) {
 			throw new IllegalStateException("There is no Task with the provided Id = " + taskId);
 		}
-		User user = ts.getTaskIdentityService().getUserById(userId);
-		ts.getTaskLifecycleEventListeners().select(new AnnotationLiteral<BeforeTaskCompletedEvent>() {
-		}).fire(task);
+		User user = getTaskIdentityService().getUserById(userId);
+		fireBeforeTaskCompletedEvent(task);
 		boolean operationAllowed = (task.getTaskData().getActualOwner() != null && task.getTaskData().getActualOwner().equals(user));
 		if (!operationAllowed) {
 			String errorMessage = "The user" + user + "is not allowed to Complete the task " + task.getId();
@@ -47,10 +39,9 @@ public class CompleteTaskCommand extends SetTaskOutputCommand {
 			// CHeck for potential Owner allowed (decorator?)
 			((InternalTaskData) task.getTaskData()).setStatus(Status.Completed);
 		}
-		super.execute(c);
+		super.execute();
 
-		ts.getTaskLifecycleEventListeners().select(new AnnotationLiteral<AfterTaskCompletedEvent>() {
-		}).fire(task);
+		fireAfterTaskCompletedEvent(task);
 
 		return task.getId();
 	}
