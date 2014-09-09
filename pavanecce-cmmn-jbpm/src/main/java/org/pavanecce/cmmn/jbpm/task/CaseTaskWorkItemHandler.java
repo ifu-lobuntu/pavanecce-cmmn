@@ -136,7 +136,7 @@ public class CaseTaskWorkItemHandler extends LocalHTWorkItemHandler {
 			if (Boolean.TRUE.equals(workItem.getParameter(TaskParameters.PLANNED))) {
 				// Bypass assignment/claim. Keep in created state
 				String discretionaryItemId = (String) workItem.getParameter(TaskParameters.DISCRETIONARY_ITEM_ID);
-				its.execute(new AddPlannedTaskCommand(null, content, task, discretionaryItemId));
+				its.execute(new AddPlannedTaskCommand(content, task, discretionaryItemId));
 			} else {
 				Boolean claimImmediately = (Boolean) workItem.getParameter(TaskParameters.CLAIM_IMMEDIATELY);
 				if (claimImmediately != null) {
@@ -152,7 +152,7 @@ public class CaseTaskWorkItemHandler extends LocalHTWorkItemHandler {
 						}
 					} else {
 						// Enablement or AutomaticActivation will be triggered elsewhere
-						its.execute(new CreateTaskCommand(null, task, content));
+						its.execute(new CreateTaskCommand(task, content));
 					}
 				} else {
 					// From BPMN

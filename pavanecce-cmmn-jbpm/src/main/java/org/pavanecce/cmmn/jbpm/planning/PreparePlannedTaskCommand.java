@@ -1,7 +1,6 @@
 package org.pavanecce.cmmn.jbpm.planning;
 
 import org.drools.core.process.instance.WorkItem;
-import org.jbpm.services.task.commands.TaskContext;
 import org.jbpm.shared.services.api.JbpmServicesPersistenceManager;
 import org.kie.api.runtime.manager.RuntimeEngine;
 import org.kie.api.runtime.manager.RuntimeManager;
@@ -16,19 +15,19 @@ public class PreparePlannedTaskCommand extends AbstractPlanningCommand<PlannedTa
 
 	private static final long serialVersionUID = -8445378L;
 
-	public PreparePlannedTaskCommand(RuntimeManager rm, JbpmServicesPersistenceManager pm, String discretionaryItemId, long parentTaskId) {
-		super(pm);
+	public PreparePlannedTaskCommand(RuntimeManager rm, String discretionaryItemId, long parentTaskId) {
+		super();
 		this.discretionaryItemId = discretionaryItemId;
 		this.parentTaskId = parentTaskId;
 		this.runtimeManager = rm;
 	}
 
 	@Override
-	public PlannedTask execute(TaskContext context) {
-		long processInstanceId = ts.getTaskById(parentTaskId).getTaskData().getProcessInstanceId();
+	public PlannedTask execute() {
+		long processInstanceId = getTaskById(parentTaskId).getTaskData().getProcessInstanceId();
 		RuntimeEngine runtime = runtimeManager.getRuntimeEngine(ProcessInstanceIdContext.get(processInstanceId));
 		CaseInstance ci = (CaseInstance) runtime.getKieSession().getProcessInstance(processInstanceId);
 		WorkItem wi = ci.createPlannedItem(getWorkItemId(parentTaskId), discretionaryItemId);
-		return pm.find(PlannedTaskImpl.class, ts.getTaskByWorkItemId(wi.getId()).getId());
+		return find(PlannedTaskImpl.class, getTaskByWorkItemId(wi.getId()).getId());
 	}
 }
