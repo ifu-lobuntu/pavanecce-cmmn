@@ -11,12 +11,13 @@ import java.io.File;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.CoreOptions;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.PaxExam;
+import org.ops4j.pax.exam.junit.Configuration;
+import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.pavanecce.common.util.FileUtil;
 
-@RunWith(PaxExam.class)
+@RunWith(JUnit4TestRunner.class)
 public class DependenciesTest {
 	@Test
 	public void testIt() throws Exception {

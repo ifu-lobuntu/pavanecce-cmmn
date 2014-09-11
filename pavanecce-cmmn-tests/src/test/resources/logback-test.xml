@@ -11,7 +11,8 @@
 
   <logger name="org.jbpm" level="info"/>
   <logger name="bitronix.tm" level="error"/>
-  <logger name="org.hibernate" level="warn"/>
+  <logger name="org.hibernate" level="error"/>
+  <logger name="org.hibernate.SQL" level="error"/>
   
   <root level="info">
     <appender-ref ref="consoleAppender" />

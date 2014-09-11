@@ -181,10 +181,13 @@ public class CaseTaskLifecycleListener extends Jbpm62EventListenerAdapter {
 			WorkItemManager workItemManager = (WorkItemManager) session.getWorkItemManager();
 			WorkItem workItem = workItemManager.getWorkItem(task.getTaskData().getWorkItemId());
 			if (workItem != null) {
+				logger.info("Workitem found: Task[" + task.getName() +"].workItemId=" + task.getTaskData().getWorkItemId());
 				Map<String, Object> results = buildWorkItemResults(task, standardEvent, getRuntimeEngine(task), session, manager);
 				workItem.setResults(results);
 				// In CMMN we need the state of the PlanItemInstance for completion calculations
 				workItemManager.signalEvent(TaskParameters.WORK_ITEM_UPDATED, workItem, processInstanceId);
+			}else{
+				logger.info("Workitem not found: Task[" + task.getName() +"].workItemId=" + task.getTaskData().getWorkItemId());
 			}
 		} else {
 			super.processTaskState(task);

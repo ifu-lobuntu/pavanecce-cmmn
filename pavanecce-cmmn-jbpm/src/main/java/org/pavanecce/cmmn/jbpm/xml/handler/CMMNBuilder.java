@@ -10,11 +10,12 @@ import org.kie.internal.assembler.KieAssemblers;
 import org.kie.internal.builder.KnowledgeBuilder;
 import org.kie.internal.utils.ServiceRegistryImpl;
 
-public class CMMNBuilder implements KieAssemblerService{
+public class CMMNBuilder implements KieAssemblerService {
 	public static final ResourceType CMMN_RESOURCE_TYPE = ResourceType.addResourceTypeToRegistry("CMMN", "CMMN", "src/main/resources", "cmmn");
 	static {
 		ServiceRegistryImpl.getInstance().get(KieAssemblers.class).getAssemblers().put(CMMN_RESOURCE_TYPE, new CMMNBuilder());
 	}
+
 	@Override
 	public Class<?> getServiceInterface() {
 		return KieAssemblerService.class;
@@ -26,15 +27,14 @@ public class CMMNBuilder implements KieAssemblerService{
 	}
 
 	@Override
-	public void addResource(KnowledgeBuilder kbuilder, Resource resource,
-			ResourceType type, ResourceConfiguration configuration)
+	public void addResource(KnowledgeBuilder kbuilder, Resource resource, ResourceType type, ResourceConfiguration configuration)
 			throws Exception {
-        KnowledgeBuilderImpl kb = (KnowledgeBuilderImpl) kbuilder;
+		KnowledgeBuilderImpl kb = (KnowledgeBuilderImpl) kbuilder;
 		KnowledgeBuilderConfigurationImpl conf = kb.getBuilderConfiguration();
-        if (conf.getSemanticModules().getSemanticModule(CMMNSemanticModule.CMMN_URI) == null) {
-        	conf.addSemanticModule(new CMMNSemanticModule());
-        }
-        kb.addProcessFromXml(resource);
-		
+		if (conf.getSemanticModules().getSemanticModule(CMMNSemanticModule.CMMN_URI) == null) {
+			conf.addSemanticModule(new CMMNSemanticModule());
+		}
+		kb.addProcessFromXml(resource);
+
 	}
 }

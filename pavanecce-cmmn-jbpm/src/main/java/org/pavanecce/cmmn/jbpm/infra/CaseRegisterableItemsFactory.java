@@ -1,6 +1,8 @@
 package org.pavanecce.cmmn.jbpm.infra;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jbpm.runtime.manager.impl.DefaultRegisterableItemsFactory;
@@ -9,6 +11,7 @@ import org.jbpm.services.task.wih.ExternalTaskEventListener;
 import org.jbpm.services.task.wih.LocalHTWorkItemHandler;
 import org.kie.api.runtime.manager.RuntimeEngine;
 import org.kie.api.runtime.process.WorkItemHandler;
+import org.kie.api.task.TaskLifeCycleEventListener;
 import org.kie.internal.runtime.manager.Disposable;
 import org.kie.internal.runtime.manager.DisposeListener;
 import org.kie.internal.task.api.EventService;
@@ -17,18 +20,12 @@ import org.pavanecce.cmmn.jbpm.task.CaseTaskWorkItemHandler;
 import org.pavanecce.cmmn.jbpm.task.UpdateTaskStatusWorkItemHandler;
 
 public class CaseRegisterableItemsFactory extends DefaultRegisterableItemsFactory {
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private TaskLifeCycleEventListener lifecycleListener =new CaseTaskLifecycleListener();
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	protected WorkItemHandler getHTWorkItemHandler(RuntimeEngine runtime) {
-		CaseTaskLifecycleListener listener = new CaseTaskLifecycleListener();
-//		listener.setRuntimeManager(((RuntimeEngineImpl) runtime).getManager());
-
 		LocalHTWorkItemHandler humanTaskHandler = new CaseTaskWorkItemHandler();
 		humanTaskHandler.setRuntimeManager(((RuntimeEngineImpl) runtime).getManager());
-		if (runtime.getTaskService() instanceof EventService) {
-			((EventService) runtime.getTaskService()).registerTaskEventListener(listener);
-		}
-
 		if (runtime instanceof Disposable) {
 			((Disposable) runtime).addDisposeListener(new DisposeListener() {
 
@@ -51,6 +48,18 @@ public class CaseRegisterableItemsFactory extends DefaultRegisterableItemsFactor
 		stwih.setRuntimeManager(((RuntimeEngineImpl) runtime).getManager());
 		defaultHandlers.put(TaskParameters.UPDATE_TASK_STATUS, stwih);
 		return defaultHandlers;
+	}
+	@Override
+	public List<TaskLifeCycleEventListener> getTaskListeners() {
+		List<TaskLifeCycleEventListener> result = new ArrayList<TaskLifeCycleEventListener>();
+		for (TaskLifeCycleEventListener listener : super.getTaskListeners()) {
+			if(listener instanceof ExternalTaskEventListener){
+				result.add(lifecycleListener);
+			}else{
+				result.add(listener);
+			}
+		}
+		return result;
 	}
 
 }

@@ -135,18 +135,17 @@ public abstract class AbstractPersistentSubscriptionManager<T extends CaseSubscr
 			try {
 				JpaPersistenceContextManager pcm = (JpaPersistenceContextManager) engine.getKieSession().getEnvironment()
 						.get(EnvironmentName.PERSISTENCE_CONTEXT_MANAGER);
-				EntityManager em = pcm.getCommandScopedEntityManager();
-				em.joinTransaction();
-				pcm.beginCommandScopedEntityManager();
 				for (CaseFileItemEventWrapper w : eq) {
-					PersistenceContext pc = pcm.getCommandScopedPersistenceContext();
-					pc.joinTransaction();
+//					pcm.beginCommandScopedEntityManager();
+//					PersistenceContext context = pcm.getCommandScopedPersistenceContext();
+//					EntityManager em = pcm.getCommandScopedEntityManager();
+//					em.joinTransaction();
 					CaseFileItemEvent event = w.getEvent();
 					String eventType = OnPart.getType(event.getCaseFileItemName(), event.getTransition());
 					engine.getKieSession().signalEvent(eventType, event, w.getProcessInstanceId());
+//					em.flush();
+//					pcm.endCommandScopedEntityManager();
 				}
-				em.flush();
-				pcm.endCommandScopedEntityManager();
 			} catch (Exception e) {
 				logger.error("Could not dispatch CaseFileItemEvents", e);
 			}

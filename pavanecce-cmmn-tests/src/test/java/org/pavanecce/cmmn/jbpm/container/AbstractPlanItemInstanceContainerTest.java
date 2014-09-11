@@ -96,8 +96,9 @@ public abstract class AbstractPlanItemInstanceContainerTest extends AbstractCons
 	protected void completeTasks(List<TaskSummary> subTasksByParent) {
 		for (TaskSummary taskSummary : subTasksByParent) {
 			if (taskSummary.getName().equals("TheHumanTaskPlanItem")) {
-				getTaskService().start(taskSummary.getId(), "Builder");
-				getTaskService().complete(taskSummary.getId(), "Builder", new HashMap<String, Object>());
+				String id = taskSummary.getActualOwner()!=null?taskSummary.getActualOwner().getId():"Builder";
+				getTaskService().start(taskSummary.getId(), id);
+				getTaskService().complete(taskSummary.getId(), id, new HashMap<String, Object>());
 			} else if (taskSummary.getName().equals("TheCaseTaskPlanItem")) {
 				getPersistence().start();
 				CaseInstance ci3 = reloadCaseInstance();
@@ -183,6 +184,7 @@ public abstract class AbstractPlanItemInstanceContainerTest extends AbstractCons
 		for (TaskSummary taskSummary : subTasksByParent) {
 			if (taskSummary.getName().equals(string)) {
 				foundStatus = taskSummary.getStatus();
+				break;
 			}
 		}
 		if (foundStatus == null) {

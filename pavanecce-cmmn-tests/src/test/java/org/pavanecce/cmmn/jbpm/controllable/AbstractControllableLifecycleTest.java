@@ -195,8 +195,12 @@ public abstract class AbstractControllableLifecycleTest extends AbstractConstruc
 		assertEquals(1, list.size());
 		// *****WHEN
 		// *****WHEN
+		getPersistence().start();
 		getTaskService().start(list.get(0).getId(), getEventGeneratingTaskUser());
+		getPersistence().commit();
+		getPersistence().start();
 		getTaskService().suspend(list.get(0).getId(), getEventGeneratingTaskUser());
+		getPersistence().commit();
 		// *****THEN
 		list = getTaskService().getTasksAssignedAsPotentialOwner("Builder", "en-UK");
 		assertEquals(2, list.size());
@@ -218,8 +222,12 @@ public abstract class AbstractControllableLifecycleTest extends AbstractConstruc
 		assertEquals(1, list.size());
 		// *****WHEN
 		// *****WHEN
+		getPersistence().start();
 		getTaskService().start(list.get(0).getId(), getEventGeneratingTaskUser());
+		getPersistence().commit();
+		getPersistence().start();
 		getTaskService().exit(list.get(0).getId(), getBusinessAdministratorUser());
+		getPersistence().commit();
 		// *****THEN
 		list = getTaskService().getTasksAssignedAsPotentialOwner("Builder", "en-UK");
 		assertEquals(2, list.size());
@@ -243,10 +251,16 @@ public abstract class AbstractControllableLifecycleTest extends AbstractConstruc
 		triggerStartOfTask();
 		List<TaskSummary> list = getTaskService().getTasksOwned(getEventGeneratingTaskUser(), "en-UK");
 		assertEquals(1, list.size());
+		getPersistence().start();
 		getTaskService().start(list.get(0).getId(), getEventGeneratingTaskUser());
+		getPersistence().commit();
+		getPersistence().start();
 		getTaskService().suspend(list.get(0).getId(), getEventGeneratingTaskUser());
+		getPersistence().commit();
 		// *****WHEN
+		getPersistence().start();
 		getTaskService().resume(list.get(0).getId(), getEventGeneratingTaskUser());
+		getPersistence().commit();
 		// *****THEN
 		list = getTaskService().getTasksAssignedAsPotentialOwner("Builder", "en-UK");
 		assertEquals(3, list.size());
@@ -296,7 +310,9 @@ public abstract class AbstractControllableLifecycleTest extends AbstractConstruc
 		triggerStartOfTask();
 		List<TaskSummary> list = getTaskService().getTasksOwned(getEventGeneratingTaskUser(), "en-UK");
 		assertEquals(1, list.size());
+		getPersistence().start();
 		getTaskService().skip(list.get(0).getId(), getEventGeneratingTaskUser());
+		getPersistence().commit();
 		// *****THEN
 		list = getTaskService().getTasksAssignedAsPotentialOwner("Builder", "en-UK");
 		assertEquals(2, list.size());
@@ -340,7 +356,9 @@ public abstract class AbstractControllableLifecycleTest extends AbstractConstruc
 		List<TaskSummary> list = getTaskService().getTasksAssignedAsPotentialOwner(getEventGeneratingTaskUser(), "en-UK");
 		assertTrue(list.size() > 0); // there could be 2
 		assertNodeTriggered(caseInstance.getId(), "TheManuallyActivatedTaskPlanItem");
+		getPersistence().start();
 		getTaskService().start(findTask(list, "TheManuallyActivatedTaskPlanItem"), getEventGeneratingTaskUser());
+		getPersistence().commit();
 		// *****THEN
 		list = getTaskService().getTasksAssignedAsPotentialOwner("Builder", "en-UK");
 		assertEquals(3, list.size());
@@ -405,10 +423,16 @@ public abstract class AbstractControllableLifecycleTest extends AbstractConstruc
 		triggerStartOfTask();
 		List<TaskSummary> list = getTaskService().getTasksOwned(getEventGeneratingTaskUser(), "en-UK");
 		assertEquals(1, list.size());
+		getPersistence().start();
 		getTaskService().start(list.get(0).getId(), getEventGeneratingTaskUser());
+		getPersistence().commit();
+		getPersistence().start();
 		getTaskService().fail(list.get(0).getId(), getEventGeneratingTaskUser(), new HashMap<String, Object>());
+		getPersistence().commit();
 		// *****WHEN
+		getPersistence().start();
 		getTaskService().execute(new ReactivateTaskCommand(list.get(0).getId(), getEventGeneratingTaskUser()));
+		getPersistence().commit();
 		// *****THEN
 		list = getTaskService().getTasksAssignedAsPotentialOwner("Builder", "en-UK");
 		assertTrue(list.size() > 0);
@@ -426,9 +450,13 @@ public abstract class AbstractControllableLifecycleTest extends AbstractConstruc
 		triggerStartOfTask();
 		List<TaskSummary> list = getTaskService().getTasksOwned(getEventGeneratingTaskUser(), "en-UK");
 		assertEquals(1, list.size());
+		getPersistence().start();
 		getTaskService().skip(list.get(0).getId(), getEventGeneratingTaskUser());
+		getPersistence().commit();
 		// *****WHEN
+		getPersistence().start();
 		getTaskService().execute(new ReenableTaskCommand(list.get(0).getId(), getEventGeneratingTaskUser()));
+		getPersistence().commit();
 		// *****THEN
 		list = getTaskService().getTasksAssignedAsPotentialOwner("Builder", "en-UK");
 		assertTrue(list.size() > 0);

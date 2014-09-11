@@ -29,7 +29,7 @@ public class AddPlannedTaskCommand extends AbstractTaskCommand<PlannedTask> {
 		taskId = getTaskInstanceService().addTask(task, (Map<String, Object>) null);
 		task = getTaskById(taskId);
 		((InternalTaskData) task.getTaskData()).setDocumentContentId(ensureContentPresent(task, -1, inputParameters, "Content"));
-		((InternalTaskData) task.getTaskData()).setOutputContentId(ensureContentPresent(task, -1, new HashMap<String, Object>(), "Outpupt"));
+		((InternalTaskData) task.getTaskData()).setOutputContentId(ensureContentPresent(task, -1, new HashMap<String, Object>(), "Output"));
 		PlannedTaskImpl pt = new PlannedTaskImpl((TaskImpl) task);
 		pt.setDiscretionaryItemId(discretionaryItemId);
 		persist(pt);

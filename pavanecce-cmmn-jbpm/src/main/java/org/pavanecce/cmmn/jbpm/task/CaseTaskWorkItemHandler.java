@@ -165,6 +165,8 @@ public class CaseTaskWorkItemHandler extends LocalHTWorkItemHandler {
 					}
 				}
 			}
+			logger.info("Task created Task[" + task.getName() +"].workItemId=" + task.getTaskData().getWorkItemId());
+
 		} catch (Exception e) {
 			if (action.equals(OnErrorAction.ABORT)) {
 				manager.abortWorkItem(workItem.getId());

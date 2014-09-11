@@ -10,6 +10,7 @@ import org.jbpm.services.task.HumanTaskServiceFactory;
 import org.jbpm.services.task.commands.TaskCommand;
 import org.jbpm.services.task.persistence.JPATaskPersistenceContextManager;
 import org.jbpm.services.task.persistence.TaskTransactionInterceptor;
+import org.jbpm.services.task.wih.ExternalTaskEventListener;
 import org.kie.api.command.Command;
 import org.kie.api.runtime.Environment;
 import org.kie.api.runtime.EnvironmentName;
@@ -21,6 +22,7 @@ import org.kie.api.task.UserGroupCallback;
 import org.kie.internal.command.Context;
 import org.kie.internal.command.World;
 import org.kie.internal.runtime.manager.TaskServiceFactory;
+import org.kie.internal.task.api.InternalTaskService;
 import org.kie.internal.task.api.TaskContext;
 import org.kie.internal.task.api.TaskPersistenceContext;
 import org.kie.internal.task.api.TaskPersistenceContextManager;
@@ -128,11 +130,12 @@ public class TestTaskServiceFactory implements TaskServiceFactory {
 			// register task listeners if any
 			RegisterableItemsFactory itemsFactory = runtimeEnvironment
 					.getRegisterableItemsFactory();
+			ExternalTaskEventListener oldListener=null;
 			for (TaskLifeCycleEventListener taskListener : itemsFactory
 					.getTaskListeners()) {
 				configurator.listener(taskListener);
 			}
-			TaskService internalTaskService = configurator.getTaskService();
+			InternalTaskService internalTaskService = (InternalTaskService) configurator.getTaskService();
 			return internalTaskService;
 		} else {
 			return null;

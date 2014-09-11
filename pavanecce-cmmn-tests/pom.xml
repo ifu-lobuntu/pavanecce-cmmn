@@ -51,6 +51,10 @@
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.framework</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.eclipse.tycho</groupId>
+			<artifactId>org.eclipse.osgi</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

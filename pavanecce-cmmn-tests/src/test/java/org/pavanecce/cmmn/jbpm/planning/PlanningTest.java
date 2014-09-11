@@ -1,14 +1,17 @@
 package org.pavanecce.cmmn.jbpm.planning;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.jbpm.services.task.impl.model.UserImpl;
 import org.junit.Test;
 import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.api.task.model.Status;
+import org.kie.api.task.model.Task;
 import org.kie.api.task.model.TaskSummary;
 import org.kie.internal.task.api.model.InternalTaskData;
 import org.pavanecce.cmmn.jbpm.ApplicableDiscretionaryItem;
@@ -108,6 +111,7 @@ public class PlanningTest extends AbstractPlanItemInstanceContainerTest {
 		List<PlannedTask> plannedTasks = new ArrayList<PlannedTask>();
 		PlannedTask plannedCaseTask = getPlanningService().preparePlannedTask(parentTaskId, "theCaseTaskDiscretionaryItemId");
 		PlannedTask plannedHumanTask = getPlanningService().preparePlannedTask(parentTaskId, "theHumanTaskDiscretionaryItemId");
+		Task asdf = getTaskService().getTaskById(plannedHumanTask.getId());
 		PlannedTask plannedStage = getPlanningService().preparePlannedTask(parentTaskId, "theStageDiscretionaryItemId");
 		PlanningTableInstance pti = getPlanningService().startPlanning(getTaskService().getTaskByWorkItemId(caseInstance.getWorkItemId()).getId(),
 				"ConstructionProjectManager", false);
@@ -115,9 +119,15 @@ public class PlanningTest extends AbstractPlanItemInstanceContainerTest {
 		plannedTasks.add(plannedStage);
 		plannedTasks.add(plannedHumanTask);
 		for (PlannedTaskSummary s : pti.getPlannedTasks()) {
+			if(s.getName().equals("TheHumanTaskPlanItem")){
+				getPersistence().start();
+				getTaskService().claim(s.getId(), "Builder");
+				getPersistence().commit();
+			}
 			plannedTasks.add(getPlanningService().getPlannedTaskById(s.getId()));
 		}
 		for (PlannedTask plannedTask : plannedTasks) {
+			System.out.println(plannedTask.getName() +" assigned");
 			((InternalTaskData) plannedTask.getTaskData()).setActualOwner(new UserImpl("salaboy"));
 			plannedTask.getPeopleAssignments().getPotentialOwners().add(new UserImpl("salaboy"));
 		}
@@ -126,6 +136,7 @@ public class PlanningTest extends AbstractPlanItemInstanceContainerTest {
 		getPlanningService().submitPlan(parentTaskId, plannedTasks, false);
 		getPersistence().commit();
 		getPersistence().start();
+		asdf = getTaskService().getTaskById(plannedHumanTask.getId());
 		caseInstance = reloadCaseInstance(caseInstance);
 		assertFalse(caseInstance.canComplete());
 		assertNotNull(caseInstance.findNodeForWorkItem(plannedCaseTask.getTaskData().getWorkItemId()));
@@ -138,7 +149,16 @@ public class PlanningTest extends AbstractPlanItemInstanceContainerTest {
 		getPersistence().commit();
 		getPersistence().start();
 		List<TaskSummary> tasks = getTaskService().getTasksOwned("salaboy", "en-UK");
-		assertEquals(6, tasks.size());
+		System.out.println("Plannedtasks:");
+		for (PlannedTask plannedTask : plannedTasks) {
+				System.out.println(plannedTask.getName() +":" + plannedTask.getTaskData().getStatus());
+				asdf = getTaskService().getTaskById(plannedTask.getId());
+		}
+		System.out.println("tasks:");
+		for (TaskSummary taskSummary : tasks) {
+			System.out.println(taskSummary.getName() + ":" + taskSummary.getStatus());
+		}
+		assertEquals(6, tasks.size());//TheHumanTaskPlanItem is in Ready state in spite of having been assigned, but that is more or less right
 		assertTaskInState(tasks, plannedCaseTask.getPlanItemName(), Status.Reserved);
 		assertTaskInState(tasks, plannedHumanTask.getPlanItemName(), Status.Reserved);
 		assertTaskInState(tasks, plannedStage.getPlanItemName(), Status.InProgress);
@@ -182,7 +202,7 @@ public class PlanningTest extends AbstractPlanItemInstanceContainerTest {
 		getPersistence().start();
 		getPlanningService().submitPlan(parentTaskId, plannedTasks, false);
 		getPersistence().commit();
-		List<TaskSummary> tasks = getTaskService().getTasksOwned("salaboy", "en-UK");
+		List<TaskSummary> tasks = getTaskService().getTasksOwned("salaboy", Arrays.asList(Status.Created,Status.Ready,Status.Reserved,Status.Suspended),null);
 		assertEquals(6, tasks.size());
 		for (TaskSummary taskSummary : tasks) {
 			if (taskSummary.getId() == plannedCaseTask.getId() || taskSummary.getId() == plannedHumanTask.getId()
