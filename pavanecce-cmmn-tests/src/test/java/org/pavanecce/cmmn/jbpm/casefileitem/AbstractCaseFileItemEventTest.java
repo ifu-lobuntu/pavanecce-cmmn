@@ -2,10 +2,10 @@ package org.pavanecce.cmmn.jbpm.casefileitem;
 
 import java.util.Map;
 
+import org.jbpm.cmmn.common.WorkItemParameters;
+import org.jbpm.cmmn.instance.CaseInstance;
 import org.junit.Test;
 import org.pavanecce.cmmn.jbpm.AbstractConstructionTestCase;
-import org.pavanecce.cmmn.jbpm.TaskParameters;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
 
 public abstract class AbstractCaseFileItemEventTest extends AbstractConstructionTestCase {
 
@@ -275,7 +275,7 @@ public abstract class AbstractCaseFileItemEventTest extends AbstractConstruction
 	protected void givenThatTheTestCaseIsStarted() {
 		createRuntimeManager(getProcessFile());
 		Map<String, Object> params = prepareCaseParameters();
-		params.put(TaskParameters.INITIATOR, "Spielman");
+		params.put(WorkItemParameters.INITIATOR, "Spielman");
 		getPersistence().start();
 		caseInstance = (CaseInstance) getRuntimeEngine().getKieSession().startProcess("CaseFileItemEventTests", params);
 		getPersistence().commit();

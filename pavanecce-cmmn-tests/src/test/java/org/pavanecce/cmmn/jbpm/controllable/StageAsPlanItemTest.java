@@ -1,8 +1,8 @@
 package org.pavanecce.cmmn.jbpm.controllable;
 
+import org.jbpm.cmmn.instance.PlanElementState;
+import org.jbpm.cmmn.instance.impl.StageInstance;
 import org.kie.api.task.model.Status;
-import org.pavanecce.cmmn.jbpm.lifecycle.PlanElementState;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.StageInstance;
 
 public class StageAsPlanItemTest extends AbstractControllableLifecycleTest {
 	{

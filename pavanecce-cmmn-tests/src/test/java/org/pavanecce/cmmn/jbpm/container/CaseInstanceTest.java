@@ -2,15 +2,16 @@ package org.pavanecce.cmmn.jbpm.container;
 
 import java.util.Map;
 
+import org.jbpm.cmmn.flow.core.impl.DefaultJoin;
+import org.jbpm.cmmn.instance.CaseInstance;
+import org.jbpm.cmmn.instance.PlanElementState;
+import org.jbpm.cmmn.instance.PlanItemInstanceContainer;
+import org.jbpm.cmmn.instance.impl.CaseInstanceImpl;
 import org.jbpm.services.task.utils.ContentMarshallerHelper;
 import org.junit.Test;
 import org.kie.api.task.model.Content;
 import org.kie.api.task.model.Task;
 import org.kie.internal.task.api.ContentMarshallerContext;
-import org.pavanecce.cmmn.jbpm.flow.DefaultJoin;
-import org.pavanecce.cmmn.jbpm.lifecycle.PlanElementState;
-import org.pavanecce.cmmn.jbpm.lifecycle.PlanItemInstanceContainer;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
 
 import test.cmmn.WallPlan;
 
@@ -63,7 +64,7 @@ public class CaseInstanceTest extends AbstractPlanItemInstanceContainerLifecycle
 	@SuppressWarnings("unchecked")
 	protected void testCloseAndOutput(PlanItemInstanceContainer piic) {
 		// and close it
-		if (piic instanceof CaseInstance) {
+		if (piic instanceof CaseInstanceImpl) {
 			getPersistence().start();
 			CaseInstance ci = reloadCaseInstance();
 			ci.signalEvent(DefaultJoin.CLOSE, new Object());

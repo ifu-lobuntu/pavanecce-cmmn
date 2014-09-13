@@ -6,12 +6,13 @@ import java.util.Map;
 
 import javax.jcr.Node;
 
+import org.jbpm.cmmn.common.WorkItemParameters;
+import org.jbpm.cmmn.instance.CaseInstance;
 import org.junit.Test;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.manager.RuntimeEngine;
 import org.kie.api.task.TaskService;
 import org.kie.api.task.model.TaskSummary;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
 
 import test.cmmn.ConstructionCase;
 import test.cmmn.House;
@@ -40,7 +41,7 @@ public class BuilderTest extends AbstractConstructionTestCase {
 		getPersistence().commit();
 		params.put("housePlan", housePlan);
 		params.put("house", house);
-		params.put(TaskParameters.INITIATOR, "Spielman");
+		params.put(WorkItemParameters.INITIATOR, "Spielman");
 		getPersistence().start();
 		CaseInstance processInstance = (CaseInstance) ksession.startProcess("hello", params);
 		getPersistence().commit();
@@ -108,7 +109,7 @@ public class BuilderTest extends AbstractConstructionTestCase {
 		getPersistence().commit();
 		params.put("housePlan", housePlan);
 		params.put("house", house);
-		params.put(TaskParameters.INITIATOR, "Spielman");
+		params.put(WorkItemParameters.INITIATOR, "Spielman");
 		getPersistence().start();
 		CaseInstance processInstance = (CaseInstance) ksession.startProcess("bye", params);
 		getPersistence().commit();

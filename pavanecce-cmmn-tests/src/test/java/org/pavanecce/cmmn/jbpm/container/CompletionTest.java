@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jbpm.cmmn.common.WorkItemParameters;
+import org.jbpm.cmmn.instance.CaseInstance;
 import org.junit.Test;
 import org.kie.api.task.model.TaskSummary;
 import org.pavanecce.cmmn.jbpm.AbstractConstructionTestCase;
-import org.pavanecce.cmmn.jbpm.TaskParameters;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
 
 import test.cmmn.ConstructionCase;
 import test.cmmn.House;
@@ -80,7 +80,7 @@ public class CompletionTest extends AbstractConstructionTestCase {
 		getPersistence().commit();
 		params.put("housePlan", housePlan);
 		params.put("house", house);
-		params.put(TaskParameters.INITIATOR, "Spielman");
+		params.put(WorkItemParameters.INITIATOR, "Spielman");
 		getPersistence().start();
 		caseInstance = (CaseInstance) getRuntimeEngine().getKieSession().startProcess("CompletionTests", params);
 		getPersistence().commit();

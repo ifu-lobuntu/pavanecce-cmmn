@@ -390,6 +390,9 @@ more commitments</body>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_FhUDMCtjEeS1Ppi_M8XeJg" name="CMMNConversationForAction" classifierBehavior="_FhUDMytjEeS1Ppi_M8XeJg">
         <generalization xmi:type="uml:Generalization" xmi:id="_FhUDMStjEeS1Ppi_M8XeJg" general="_d_6D0CrFEeStI5_B-GK3XA"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_me0-kDo0EeScHpOXWsRArw" name="renegotiator"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_pNvb4Do0EeScHpOXWsRArw" name="initiator"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_spg_MDo0EeScHpOXWsRArw" name="owner"/>
         <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_FhUDMitjEeS1Ppi_M8XeJg" name="InterfaceRealization1" client="_FhUDMCtjEeS1Ppi_M8XeJg" supplier="_V-5NwCtUEeSDa8AcgulCaA" contract="_V-5NwCtUEeSDa8AcgulCaA"/>
         <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_FhUDMytjEeS1Ppi_M8XeJg" name="ConversationForActionStateMachine">
           <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_tSZLoCtjEeS1Ppi_M8XeJg" name="PerformanceAndAcceptance" submachineState="_FhUDWytjEeS1Ppi_M8XeJg">
@@ -437,10 +440,41 @@ more commitments</body>
               <transition xmi:type="uml:Transition" xmi:id="_tSZLuytjEeS1Ppi_M8XeJg" name="Transition13" source="_tSZLxCtjEeS1Ppi_M8XeJg" target="_tSZLwCtjEeS1Ppi_M8XeJg">
                 <trigger xmi:type="uml:Trigger" xmi:id="_tSZLvCtjEeS1Ppi_M8XeJg" name="declareInadequate" event="_-XELYStUEeSDa8AcgulCaA"/>
               </transition>
-              <transition xmi:type="uml:Transition" xmi:id="_TzeZ4CtmEeS1Ppi_M8XeJg" name="Transition2" source="_tSZLvStjEeS1Ppi_M8XeJg" target="_tSZLwCtjEeS1Ppi_M8XeJg"/>
+              <transition xmi:type="uml:Transition" xmi:id="_NLQ3UDouEeScHpOXWsRArw" name="Transition2" source="_tSZLvStjEeS1Ppi_M8XeJg" target="_tSZLwCtjEeS1Ppi_M8XeJg"/>
+              <transition xmi:type="uml:Transition" xmi:id="_TJ0gcDouEeScHpOXWsRArw" name="Transition14" source="_tSZLwCtjEeS1Ppi_M8XeJg" target="_zEZcIDotEeScHpOXWsRArw">
+                <trigger xmi:type="uml:Trigger" xmi:id="_gKeTUDouEeScHpOXWsRArw" name="" event="_7e8UcCtkEeS1Ppi_M8XeJg"/>
+              </transition>
+              <transition xmi:type="uml:Transition" xmi:id="_g-4LwDouEeScHpOXWsRArw" name="counter" source="_zEZcITotEeScHpOXWsRArw" target="_zEZcIDotEeScHpOXWsRArw">
+                <trigger xmi:type="uml:Trigger" xmi:id="_og82EDouEeScHpOXWsRArw" event="_miVCADZkEeSB8JRRBI1H6w"/>
+              </transition>
+              <transition xmi:type="uml:Transition" xmi:id="_pu-vcDouEeScHpOXWsRArw" name="Transition15" source="_zEZcIDotEeScHpOXWsRArw" target="_zEZcITotEeScHpOXWsRArw">
+                <trigger xmi:type="uml:Trigger" xmi:id="_sxJf8DouEeScHpOXWsRArw" event="_mjp3sDZkEeSB8JRRBI1H6w"/>
+              </transition>
+              <transition xmi:type="uml:Transition" xmi:id="_kHlaYDo0EeScHpOXWsRArw" name="Transition16" guard="_Owj9ADo1EeScHpOXWsRArw" source="_zEZcIDotEeScHpOXWsRArw" target="_e0t5wCtmEeS1Ppi_M8XeJg">
+                <ownedRule xmi:type="uml:Constraint" xmi:id="_Owj9ADo1EeScHpOXWsRArw">
+                  <specification xmi:type="uml:OpaqueExpression" xmi:id="_Owj9ATo1EeScHpOXWsRArw">
+                    <language>OCL</language>
+                    <body>renegotiator=owner</body>
+                  </specification>
+                </ownedRule>
+                <trigger xmi:type="uml:Trigger" xmi:id="_H-i2oDo1EeScHpOXWsRArw" event="_-XEycCtUEeSDa8AcgulCaA"/>
+              </transition>
+              <transition xmi:type="uml:Transition" xmi:id="_k8oMADo0EeScHpOXWsRArw" name="Transition17" guard="_Y7rGIDo1EeScHpOXWsRArw" source="_zEZcIDotEeScHpOXWsRArw" target="_aTDFYCtmEeS1Ppi_M8XeJg">
+                <ownedRule xmi:type="uml:Constraint" xmi:id="_Y7rGIDo1EeScHpOXWsRArw">
+                  <specification xmi:type="uml:OpaqueExpression" xmi:id="_Y7rGITo1EeScHpOXWsRArw">
+                    <language>OCL</language>
+                    <body>renegotiator=initiator</body>
+                  </specification>
+                </ownedRule>
+                <trigger xmi:type="uml:Trigger" xmi:id="_SFyMYDo1EeScHpOXWsRArw" event="_-XC9QCtUEeSDa8AcgulCaA"/>
+              </transition>
               <subvertex xmi:type="uml:Pseudostate" xmi:id="_tSZLvStjEeS1Ppi_M8XeJg" name="Initial0"/>
               <subvertex xmi:type="uml:State" xmi:id="_tSZLwCtjEeS1Ppi_M8XeJg" name="InProgress"/>
               <subvertex xmi:type="uml:State" xmi:id="_tSZLxCtjEeS1Ppi_M8XeJg" name="AwaitingAcceptance"/>
+              <subvertex xmi:type="uml:State" xmi:id="_zEZcIDotEeScHpOXWsRArw" name="RenegotiationRequested"/>
+              <subvertex xmi:type="uml:State" xmi:id="_zEZcITotEeScHpOXWsRArw" name="Countered">
+                <deferrableTrigger xmi:type="uml:Trigger" xmi:id="_jwbtYDouEeScHpOXWsRArw" event="_miVCADZkEeSB8JRRBI1H6w"/>
+              </subvertex>
             </region>
           </ownedBehavior>
           <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_KGsTYDZaEeSP7-vK60zsxA" name="Negotiation" submachineState="_LSHHsCtkEeS1Ppi_M8XeJg">
@@ -490,66 +524,6 @@ more commitments</body>
               <subvertex xmi:type="uml:State" xmi:id="_KGsTgjZaEeSP7-vK60zsxA" name="Countered"/>
             </region>
           </ownedBehavior>
-          <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_GmBk0DZhEeSB8JRRBI1H6w" name="Renegotiating" submachineState="_KRkXkDZjEeSB8JRRBI1H6w">
-            <connectionPoint xmi:type="uml:Pseudostate" xmi:id="_GmBk0TZhEeSB8JRRBI1H6w" name="Withdrawn" kind="exitPoint"/>
-            <connectionPoint xmi:type="uml:Pseudostate" xmi:id="_GmBk0jZhEeSB8JRRBI1H6w" name="Committed" kind="exitPoint"/>
-            <connectionPoint xmi:type="uml:Pseudostate" xmi:id="_MsTKEDZiEeSB8JRRBI1H6w" name="Renegued" kind="exitPoint"/>
-            <region xmi:type="uml:Region" xmi:id="_GmBk0zZhEeSB8JRRBI1H6w" name="Region1">
-              <transition xmi:type="uml:Transition" xmi:id="_GmBk1DZhEeSB8JRRBI1H6w" name="Transition0" source="_GmBk6zZhEeSB8JRRBI1H6w" target="_GmBk7DZhEeSB8JRRBI1H6w"/>
-              <transition xmi:type="uml:Transition" xmi:id="_GmBk1zZhEeSB8JRRBI1H6w" name="Transition3" source="_GmBk7jZhEeSB8JRRBI1H6w" target="_GmBk0jZhEeSB8JRRBI1H6w">
-                <trigger xmi:type="uml:Trigger" xmi:id="_GmBk2DZhEeSB8JRRBI1H6w" name="accept" event="_-XBvICtUEeSDa8AcgulCaA"/>
-              </transition>
-              <transition xmi:type="uml:Transition" xmi:id="_GmBk2TZhEeSB8JRRBI1H6w" name="Transition4" source="_GmBk7DZhEeSB8JRRBI1H6w" target="_GmBk7jZhEeSB8JRRBI1H6w">
-                <trigger xmi:type="uml:Trigger" xmi:id="_GmBk2jZhEeSB8JRRBI1H6w" name="counterToA" event="_mjp3sDZkEeSB8JRRBI1H6w"/>
-              </transition>
-              <transition xmi:type="uml:Transition" xmi:id="_GmBk2zZhEeSB8JRRBI1H6w" name="Transition5" source="_GmBk7jZhEeSB8JRRBI1H6w" target="_GmBk7DZhEeSB8JRRBI1H6w">
-                <trigger xmi:type="uml:Trigger" xmi:id="_GmBk3DZhEeSB8JRRBI1H6w" name="counterToRenegotiator" event="_miVCADZkEeSB8JRRBI1H6w"/>
-              </transition>
-              <transition xmi:type="uml:Transition" xmi:id="_GmBk3TZhEeSB8JRRBI1H6w" name="Transition6" guard="_3RlfgDZiEeSB8JRRBI1H6w" source="_GmBk7jZhEeSB8JRRBI1H6w" target="_GmBk0TZhEeSB8JRRBI1H6w">
-                <ownedRule xmi:type="uml:Constraint" xmi:id="_3RlfgDZiEeSB8JRRBI1H6w">
-                  <specification xmi:type="uml:OpaqueExpression" xmi:id="_3RlfgTZiEeSB8JRRBI1H6w">
-                    <language>OCL</language>
-                    <body>renegotiator=A</body>
-                  </specification>
-                </ownedRule>
-                <trigger xmi:type="uml:Trigger" xmi:id="_GmBk3jZhEeSB8JRRBI1H6w" name="withdraw" event="_-XC9QCtUEeSDa8AcgulCaA"/>
-              </transition>
-              <transition xmi:type="uml:Transition" xmi:id="_GmBk3zZhEeSB8JRRBI1H6w" name="Transition7" source="_GmBk7DZhEeSB8JRRBI1H6w">
-                <trigger xmi:type="uml:Trigger" xmi:id="_GmBk4DZhEeSB8JRRBI1H6w" name="withdraw" event="_-XC9QCtUEeSDa8AcgulCaA"/>
-                <trigger xmi:type="uml:Trigger" xmi:id="_GmBk4TZhEeSB8JRRBI1H6w" name="reject" event="_-XCWMCtUEeSDa8AcgulCaA"/>
-              </transition>
-              <transition xmi:type="uml:Transition" xmi:id="_GmBk4jZhEeSB8JRRBI1H6w" name="Transition10">
-                <trigger xmi:type="uml:Trigger" xmi:id="_GmBk4zZhEeSB8JRRBI1H6w" name="withdraw" event="_-XC9QCtUEeSDa8AcgulCaA"/>
-              </transition>
-              <transition xmi:type="uml:Transition" xmi:id="_GmBk5DZhEeSB8JRRBI1H6w" name="Transition12">
-                <trigger xmi:type="uml:Trigger" xmi:id="_GmBk5TZhEeSB8JRRBI1H6w" name="renege" event="_-XEycCtUEeSDa8AcgulCaA"/>
-              </transition>
-              <transition xmi:type="uml:Transition" xmi:id="_GmBk5jZhEeSB8JRRBI1H6w" name="Transition2" source="_GmBk7DZhEeSB8JRRBI1H6w" target="_GmBk0jZhEeSB8JRRBI1H6w">
-                <trigger xmi:type="uml:Trigger" xmi:id="_GmBk5zZhEeSB8JRRBI1H6w" name="accept" event="_-XBvICtUEeSDa8AcgulCaA"/>
-              </transition>
-              <transition xmi:type="uml:Transition" xmi:id="_GmBk6DZhEeSB8JRRBI1H6w" name="Transition8" guard="_GmBk6TZhEeSB8JRRBI1H6w">
-                <ownedRule xmi:type="uml:Constraint" xmi:id="_GmBk6TZhEeSB8JRRBI1H6w">
-                  <specification xmi:type="uml:OpaqueExpression" xmi:id="_GmBk6jZhEeSB8JRRBI1H6w" name="previouslyCommitted">
-                    <language>OCL</language>
-                    <body>committed=true</body>
-                  </specification>
-                </ownedRule>
-              </transition>
-              <transition xmi:type="uml:Transition" xmi:id="_fjOz0DZiEeSB8JRRBI1H6w" name="Transition1" target="_MsTKEDZiEeSB8JRRBI1H6w"/>
-              <transition xmi:type="uml:Transition" xmi:id="_903mUDZiEeSB8JRRBI1H6w" name="Transition9" guard="_BkItYDZjEeSB8JRRBI1H6w" source="_GmBk7jZhEeSB8JRRBI1H6w" target="_MsTKEDZiEeSB8JRRBI1H6w">
-                <ownedRule xmi:type="uml:Constraint" xmi:id="_BkItYDZjEeSB8JRRBI1H6w">
-                  <specification xmi:type="uml:OpaqueExpression" xmi:id="_BkItYTZjEeSB8JRRBI1H6w">
-                    <language>OCL</language>
-                    <body>renegotiator=B</body>
-                  </specification>
-                </ownedRule>
-                <trigger xmi:type="uml:Trigger" xmi:id="_6S1YEDZkEeSB8JRRBI1H6w" event="_-XEycCtUEeSDa8AcgulCaA"/>
-              </transition>
-              <subvertex xmi:type="uml:Pseudostate" xmi:id="_GmBk6zZhEeSB8JRRBI1H6w" name="Initial0"/>
-              <subvertex xmi:type="uml:State" xmi:id="_GmBk7DZhEeSB8JRRBI1H6w" name="RenegotiationRequested"/>
-              <subvertex xmi:type="uml:State" xmi:id="_GmBk7jZhEeSB8JRRBI1H6w" name="Countered"/>
-            </region>
-          </ownedBehavior>
           <region xmi:type="uml:Region" xmi:id="_FhUDNCtjEeS1Ppi_M8XeJg" name="Region1">
             <transition xmi:type="uml:Transition" xmi:id="_FhUDNStjEeS1Ppi_M8XeJg" name="Transition0" source="_FhUDPitjEeS1Ppi_M8XeJg" target="_FhUDYCtjEeS1Ppi_M8XeJg">
               <trigger xmi:type="uml:Trigger" xmi:id="_FhUDNitjEeS1Ppi_M8XeJg" name="exit" event="_n-M2gCtVEeSDa8AcgulCaA"/>
@@ -585,7 +559,7 @@ more commitments</body>
                   <trigger xmi:type="uml:Trigger" xmi:id="_FhUDSytjEeS1Ppi_M8XeJg" name="parentSuspend" event="_CbMIICtVEeSDa8AcgulCaA"/>
                 </transition>
                 <transition xmi:type="uml:Transition" xmi:id="_gyyUADZeEeSP7-vK60zsxA" name="Transition6" target="_FhUDXitjEeS1Ppi_M8XeJg"/>
-                <transition xmi:type="uml:Transition" xmi:id="_chtHEDZjEeSB8JRRBI1H6w" name="Transition7" source="_RO3g4DZjEeSB8JRRBI1H6w" target="_FhUDXitjEeS1Ppi_M8XeJg"/>
+                <transition xmi:type="uml:Transition" xmi:id="_chtHEDZjEeSB8JRRBI1H6w" name="Transition7" target="_FhUDXitjEeS1Ppi_M8XeJg"/>
                 <subvertex xmi:type="uml:State" xmi:id="_FhUDTCtjEeS1Ppi_M8XeJg" name="BeingProcessed">
                   <region xmi:type="uml:Region" xmi:id="_FhUDTStjEeS1Ppi_M8XeJg" name="Region0">
                     <transition xmi:type="uml:Transition" xmi:id="_FhUDTitjEeS1Ppi_M8XeJg" name="Transition0" source="_FhUDWStjEeS1Ppi_M8XeJg" target="_FhUDWitjEeS1Ppi_M8XeJg">
@@ -600,13 +574,13 @@ more commitments</body>
                     <transition xmi:type="uml:Transition" xmi:id="_FhUDVCtjEeS1Ppi_M8XeJg" name="Transition3" source="_vzuD8DZbEeSP7-vK60zsxA" target="_FhUDWytjEeS1Ppi_M8XeJg">
                       <trigger xmi:type="uml:Trigger" xmi:id="_FhUDVStjEeS1Ppi_M8XeJg" name="manualStart" event="_CT_T8CtVEeSDa8AcgulCaA"/>
                     </transition>
-                    <transition xmi:type="uml:Transition" xmi:id="_q9RR4CtkEeS1Ppi_M8XeJg" name="Transition4" source="_FhUDWytjEeS1Ppi_M8XeJg" target="_KRkXkDZjEeSB8JRRBI1H6w">
+                    <transition xmi:type="uml:Transition" xmi:id="_q9RR4CtkEeS1Ppi_M8XeJg" name="Transition4" source="_FhUDWytjEeS1Ppi_M8XeJg">
                       <trigger xmi:type="uml:Trigger" xmi:id="_vx3CQCtkEeS1Ppi_M8XeJg" name="renegotiate" event="_7e8UcCtkEeS1Ppi_M8XeJg"/>
                     </transition>
                     <transition xmi:type="uml:Transition" xmi:id="_yvSAsDZcEeSP7-vK60zsxA" name="Transition5" source="_FhUDWitjEeS1Ppi_M8XeJg" target="_LSHHsCtkEeS1Ppi_M8XeJg">
                       <trigger xmi:type="uml:Trigger" xmi:id="_5a7ZUDZcEeSP7-vK60zsxA" name="request" event="_-W_58CtUEeSDa8AcgulCaA"/>
                     </transition>
-                    <transition xmi:type="uml:Transition" xmi:id="_eHiccDZjEeSB8JRRBI1H6w" name="Transition7" source="_ZSHloDZjEeSB8JRRBI1H6w" target="_FhUDWytjEeS1Ppi_M8XeJg"/>
+                    <transition xmi:type="uml:Transition" xmi:id="_eHiccDZjEeSB8JRRBI1H6w" name="Transition7" target="_FhUDWytjEeS1Ppi_M8XeJg"/>
                     <subvertex xmi:type="uml:State" xmi:id="_FhUDWStjEeS1Ppi_M8XeJg" name="Available"/>
                     <subvertex xmi:type="uml:State" xmi:id="_FhUDWitjEeS1Ppi_M8XeJg" name="Enabled"/>
                     <subvertex xmi:type="uml:State" xmi:id="_FhUDWytjEeS1Ppi_M8XeJg" name="Active" submachine="_tSZLoCtjEeS1Ppi_M8XeJg">
@@ -618,10 +592,6 @@ more commitments</body>
                     <subvertex xmi:type="uml:State" xmi:id="_LSHHsCtkEeS1Ppi_M8XeJg" name="UnderNegotiation" submachine="_KGsTYDZaEeSP7-vK60zsxA">
                       <connection xmi:type="uml:ConnectionPointReference" xmi:id="_vzuD8DZbEeSP7-vK60zsxA" name="Committed"/>
                       <connection xmi:type="uml:ConnectionPointReference" xmi:id="_1xRAcDZbEeSP7-vK60zsxA" name="NegotiationFailed"/>
-                    </subvertex>
-                    <subvertex xmi:type="uml:State" xmi:id="_KRkXkDZjEeSB8JRRBI1H6w" name="Renegotiating" submachine="_GmBk0DZhEeSB8JRRBI1H6w">
-                      <connection xmi:type="uml:ConnectionPointReference" xmi:id="_RO3g4DZjEeSB8JRRBI1H6w" name="ReneguedOrWithdrawn"/>
-                      <connection xmi:type="uml:ConnectionPointReference" xmi:id="_ZSHloDZjEeSB8JRRBI1H6w" name="Recommitted"/>
                     </subvertex>
                   </region>
                 </subvertex>

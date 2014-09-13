@@ -2,12 +2,12 @@ package org.pavanecce.cmmn.jbpm.occurrable;
 
 import java.util.Collection;
 
+import org.jbpm.cmmn.instance.CaseInstance;
 import org.jbpm.process.instance.InternalProcessRuntime;
 import org.jbpm.process.instance.timer.TimerInstance;
 import org.jbpm.process.instance.timer.TimerManager;
 import org.junit.After;
 import org.junit.Test;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
 
 import test.cmmn.HousePlan;
 import test.cmmn.WallPlan;

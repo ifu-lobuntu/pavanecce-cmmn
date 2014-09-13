@@ -5,14 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jbpm.cmmn.common.WorkItemParameters;
+import org.jbpm.cmmn.flow.core.CaseFileItemTransition;
+import org.jbpm.cmmn.instance.CaseInstance;
+import org.jbpm.cmmn.instance.subscription.DurableCaseSubscriptionInfo;
+import org.jbpm.cmmn.instance.subscription.SubscriptionManager;
+import org.jbpm.cmmn.instance.subscription.SubscriptionPersistenceContext;
 import org.junit.Test;
 import org.kie.api.task.model.TaskSummary;
 import org.pavanecce.cmmn.jbpm.AbstractConstructionTestCase;
-import org.pavanecce.cmmn.jbpm.TaskParameters;
-import org.pavanecce.cmmn.jbpm.event.CaseSubscriptionInfo;
-import org.pavanecce.cmmn.jbpm.event.SubscriptionManager;
-import org.pavanecce.cmmn.jbpm.flow.CaseFileItemTransition;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
 
 import test.cmmn.ConstructionCase;
 import test.cmmn.House;
@@ -23,6 +24,7 @@ public abstract class SubscriptionScopeTest extends AbstractConstructionTestCase
 		super(true, true, "org.jbpm.persistence.jpa");
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testCreateAndDeleteSubscriptionsAgainstParent() throws Exception {
 		// *****GIVEN
@@ -30,12 +32,13 @@ public abstract class SubscriptionScopeTest extends AbstractConstructionTestCase
 		// *****WHEN
 		SubscriptionManager subManager = (SubscriptionManager) getRuntimeEngine().getKieSession().getEnvironment().get(SubscriptionManager.ENV_NAME);
 		getPersistence().start();
-		assertEquals(0, subManager.getCaseSubscriptionInfoFor(housePlan, getPersistence()).getCaseFileItemSubscriptions().size());
+		SubscriptionPersistenceContext spc=(SubscriptionPersistenceContext) getPersistence();
+		assertEquals(0, subManager.getCaseSubscriptionInfoFor(housePlan, spc).getCaseFileItemSubscriptions().size());
 		getPersistence().commit();
 
 		triggerStartOfTask();
 		getPersistence().start();
-		assertEquals(0, subManager.getCaseSubscriptionInfoFor(housePlan, getPersistence()).getCaseFileItemSubscriptions().size());
+		assertEquals(0, subManager.getCaseSubscriptionInfoFor(housePlan, spc).getCaseFileItemSubscriptions().size());
 		getPersistence().commit();
 		List<TaskSummary> list = getRuntimeEngine().getTaskService().getTasksAssignedAsPotentialOwner("Builder", "en-UK");
 		assertEquals(1, list.size());
@@ -43,17 +46,17 @@ public abstract class SubscriptionScopeTest extends AbstractConstructionTestCase
 		getRuntimeEngine().getTaskService().start(list.get(0).getId(), "Builder");
 		getPersistence().commit();
 		getPersistence().start();
-		assertEquals(2, subManager.getCaseSubscriptionInfoFor(housePlan, getPersistence()).getCaseFileItemSubscriptions().size());
-		assertNotNull(subManager.getCaseSubscriptionInfoFor(housePlan, getPersistence()).findCaseFileItemSubscription("wallPlans",
+		assertEquals(2, subManager.getCaseSubscriptionInfoFor(housePlan, spc).getCaseFileItemSubscriptions().size());
+		assertNotNull(subManager.getCaseSubscriptionInfoFor(housePlan, spc).findCaseFileItemSubscription("wallPlans",
 				CaseFileItemTransition.CREATE));
-		assertNotNull(subManager.getCaseSubscriptionInfoFor(housePlan, getPersistence())
+		assertNotNull(subManager.getCaseSubscriptionInfoFor(housePlan, spc)
 				.findCaseFileItemSubscription("roofPlan", CaseFileItemTransition.DELETE));
 		getPersistence().commit();
 		getPersistence().start();
 		getRuntimeEngine().getTaskService().complete(list.get(0).getId(), "Builder", new HashMap<String, Object>());
 		getPersistence().commit();
 		getPersistence().start();
-		CaseSubscriptionInfo<?> caseSubscriptionInfoFor = subManager.getCaseSubscriptionInfoFor(housePlan, getPersistence());
+		DurableCaseSubscriptionInfo<?> caseSubscriptionInfoFor = subManager.getCaseSubscriptionInfoFor(housePlan,spc);
 		Collection<?> caseFileItemSubscriptions = caseSubscriptionInfoFor.getCaseFileItemSubscriptions();
 		assertEquals(0, caseFileItemSubscriptions.size());
 		getPersistence().commit();
@@ -77,7 +80,7 @@ public abstract class SubscriptionScopeTest extends AbstractConstructionTestCase
 		getPersistence().commit();
 		params.put("housePlan", housePlan);
 		params.put("house", house);
-		params.put(TaskParameters.INITIATOR, "Spielman");
+		params.put(WorkItemParameters.INITIATOR, "Spielman");
 		getPersistence().start();
 		caseInstance = (CaseInstance) getRuntimeEngine().getKieSession().startProcess("SubscriptionScopeTests", params);
 		getPersistence().commit();

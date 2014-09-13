@@ -1,19 +1,19 @@
 package org.pavanecce.cmmn.jbpm.casefileitem;
 
-import org.pavanecce.cmmn.jbpm.event.AbstractPersistentSubscriptionManager;
-import org.pavanecce.cmmn.jbpm.event.DemarcatedSubscriptionContext;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
+import org.jbpm.cmmn.instance.impl.CaseInstanceImpl;
+import org.jbpm.cmmn.instance.subscription.impl.AbstractDurableSubscriptionManager;
+import org.jbpm.cmmn.instance.subscription.impl.DemarcatedSubscriptionContext;
 
 public class OcmDemarcatedSubscriptionEventTest extends OcmPersistentSubscriptionEventTest {
 	@Override
-	protected AbstractPersistentSubscriptionManager<?, ?> getSubscriptionManager() {
+	protected AbstractDurableSubscriptionManager<?, ?> getSubscriptionManager() {
 		return null;
 	}
 
 	@Override
 	protected void maybeStartSubscription() {
 		getPersistence().start();
-		DemarcatedSubscriptionContext.activateSubscriptionsFrom((CaseInstance) getRuntimeEngine().getKieSession().getProcessInstance(caseInstance.getId()));
+		DemarcatedSubscriptionContext.activateSubscriptionsFrom((CaseInstanceImpl) getRuntimeEngine().getKieSession().getProcessInstance(caseInstance.getId()));
 	}
 
 	@Override

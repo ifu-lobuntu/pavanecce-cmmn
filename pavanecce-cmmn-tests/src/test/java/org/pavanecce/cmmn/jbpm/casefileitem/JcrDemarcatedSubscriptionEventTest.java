@@ -1,8 +1,8 @@
 package org.pavanecce.cmmn.jbpm.casefileitem;
 
-import org.pavanecce.cmmn.jbpm.event.DemarcatedSubscriptionContext;
+import org.jbpm.cmmn.instance.impl.CaseInstanceImpl;
+import org.jbpm.cmmn.instance.subscription.impl.DemarcatedSubscriptionContext;
 import org.pavanecce.cmmn.jbpm.jcr.JcrSubscriptionManager;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
 
 public class JcrDemarcatedSubscriptionEventTest extends JcrCaseFileItemEventTest {
 	@Override
@@ -13,7 +13,7 @@ public class JcrDemarcatedSubscriptionEventTest extends JcrCaseFileItemEventTest
 	@Override
 	protected void maybeStartSubscription() {
 		getPersistence().start();
-		DemarcatedSubscriptionContext.activateSubscriptionsFrom((CaseInstance) getRuntimeEngine().getKieSession().getProcessInstance(caseInstance.getId()));
+		DemarcatedSubscriptionContext.activateSubscriptionsFrom((CaseInstanceImpl) getRuntimeEngine().getKieSession().getProcessInstance(caseInstance.getId()));
 	}
 
 	@Override

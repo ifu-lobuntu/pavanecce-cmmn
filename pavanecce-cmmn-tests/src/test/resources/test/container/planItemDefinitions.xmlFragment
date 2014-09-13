@@ -1,5 +1,5 @@
 			<cmmn:userEvent id="endUserEventId" name="EndUserEvent" />
-			<cmmn:caseTask id="theCaseTaskId" name="TheCaseTask" caseRef="SubCase.cmmn#SubCase" isBlocking="true">
+			<cmmn:caseTask id="theCaseTaskId" name="TheCaseTask" caseRef="subcase:SubCase" isBlocking="true">
 				<cmmn:defaultControl>
 					<cmmn:requiredRule>
 						<cmmn:condition language="http://www.java.com/java">
@@ -11,13 +11,11 @@
 				</cmmn:inputs>
 				<cmmn:inputs bindingRef="wallPlanFileItemId" id="wallPlanTaskParameter" name="wallPlanTaskParameter">
 				</cmmn:inputs>
-				<cmmn:parameterMapping sourceRef="housePlanTaskParameter" targetRef="SubCase.cmmn#housePlanSubCaseParameterId" />
-				<cmmn:parameterMapping sourceRef="wallPlanTaskParameter" targetRef="SubCase.cmmn#wallPlanSubCaseParameterId">
+				<cmmn:parameterMapping sourceRef="housePlanTaskParameter" targetRef="housePlanSubCaseParameterId" />
+				<cmmn:parameterMapping sourceRef="wallPlanTaskParameter" targetRef="wallPlanSubCaseParameterId">
 				</cmmn:parameterMapping>
 			</cmmn:caseTask>
 			<cmmn:stage id="theStageId" name="TheStage" autoComplete="true">
-				<cmmn:planningTable id="theStagePlanningTable" authorizedRoleRefs="constructionProjectManagerRoleId">
-				</cmmn:planningTable>
 				<cmmn:planItem id="stageCompletingEventPlanItemId" name="StageCompletingEventPlanItem" definitionRef="stageCompletingEventId" />
 				<cmmn:planItem definitionRef="theMilestoneId" name="TheMilestonePlanItemInTheStage" id="theMilestonePlanItemInTheStageId" entryCriteriaRefs="waitingForStageCompletingEventId">
 					<cmmn:itemControl>
@@ -33,6 +31,8 @@
 						<cmmn:standardEvent>occur</cmmn:standardEvent>
 					</cmmn:planItemOnPart>
 				</cmmn:sentry>
+				<cmmn:planningTable id="theStagePlanningTable" authorizedRoleRefs="constructionProjectManagerRoleId">
+				</cmmn:planningTable>
 			</cmmn:stage>
 			<cmmn:userEvent id="stageCompletingEventId" name="StageCompletingEvent"></cmmn:userEvent>
 			<cmmn:humanTask id="theHumanTaskId" name="TheHumanTask" performerRef="builderRoleId">

@@ -129,7 +129,7 @@
 			<cmmn:humanTask id="theTask" name="The Task" performerRef="builderRoleId" isBlocking="true">
 				<cmmn:defaultControl>
 					<cmmn:requiredRule>
-						return housePlan.getWallPlans().size()>0;
+					    <cmmn:condition>return housePlan.getWallPlans().size()>0;</cmmn:condition>
 					</cmmn:requiredRule>
 				</cmmn:defaultControl>
 				<cmmn:inputs name="wallPlan" bindingRef="wallPlanFileItemId"></cmmn:inputs>

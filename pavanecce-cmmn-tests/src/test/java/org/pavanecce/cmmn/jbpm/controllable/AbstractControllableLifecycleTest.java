@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jbpm.cmmn.common.WorkItemParameters;
+import org.jbpm.cmmn.instance.CaseInstance;
+import org.jbpm.cmmn.instance.PlanElementState;
+import org.jbpm.cmmn.task.additional.commands.ReactivateTaskCommand;
+import org.jbpm.cmmn.task.additional.commands.ReenableTaskCommand;
 import org.junit.Test;
 import org.kie.api.task.model.TaskSummary;
 import org.pavanecce.cmmn.jbpm.AbstractConstructionTestCase;
-import org.pavanecce.cmmn.jbpm.TaskParameters;
-import org.pavanecce.cmmn.jbpm.lifecycle.PlanElementState;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
-import org.pavanecce.cmmn.jbpm.task.ReactivateTaskCommand;
-import org.pavanecce.cmmn.jbpm.task.ReenableTaskCommand;
 
 import test.cmmn.ConstructionCase;
 import test.cmmn.House;
@@ -498,7 +498,7 @@ public abstract class AbstractControllableLifecycleTest extends AbstractConstruc
 		getPersistence().commit();
 		params.put("housePlan", housePlan);
 		params.put("house", house);
-		params.put(TaskParameters.CASE_OWNER, getCaseOwner());
+		params.put(WorkItemParameters.CASE_OWNER, getCaseOwner());
 		getPersistence().start();
 		caseInstance = (CaseInstance) getRuntimeEngine().getKieSession().startProcess(getNameOfProcessToStart(), params);
 		getPersistence().commit();

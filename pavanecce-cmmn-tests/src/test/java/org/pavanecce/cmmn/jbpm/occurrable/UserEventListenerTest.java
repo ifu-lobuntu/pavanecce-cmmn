@@ -1,6 +1,6 @@
 package org.pavanecce.cmmn.jbpm.occurrable;
 
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
+import org.jbpm.cmmn.instance.CaseInstance;
 
 public class UserEventListenerTest extends AbstractOccurrableTestCase {
 

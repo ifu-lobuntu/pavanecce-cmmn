@@ -3,13 +3,13 @@ package org.pavanecce.cmmn.jbpm.container;
 import java.util.HashMap;
 import java.util.List;
 
+import org.jbpm.cmmn.instance.CaseInstance;
+import org.jbpm.cmmn.instance.PlanElementState;
+import org.jbpm.cmmn.instance.PlanItemInstanceContainer;
 import org.junit.Test;
 import org.kie.api.task.model.Status;
 import org.kie.api.task.model.Task;
 import org.kie.api.task.model.TaskSummary;
-import org.pavanecce.cmmn.jbpm.lifecycle.PlanElementState;
-import org.pavanecce.cmmn.jbpm.lifecycle.PlanItemInstanceContainer;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
 
 public abstract class AbstractPlanItemInstanceContainerLifecycleTest extends AbstractPlanItemInstanceContainerTest {
 

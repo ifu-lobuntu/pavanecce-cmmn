@@ -4,9 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
+import org.jbpm.cmmn.common.ApplicableDiscretionaryItem;
+import org.jbpm.cmmn.instance.CaseInstance;
+import org.jbpm.cmmn.instance.PlanElementState;
+import org.jbpm.cmmn.task.api.PlanningService;
+import org.jbpm.cmmn.task.api.impl.PlanningServiceImpl;
+import org.jbpm.cmmn.task.model.PlannedTask;
+import org.jbpm.cmmn.task.model.PlannedTaskSummary;
+import org.jbpm.cmmn.task.model.PlanningTableInstance;
 import org.jbpm.services.task.impl.model.UserImpl;
 import org.junit.Test;
 import org.kie.api.runtime.manager.RuntimeManager;
@@ -14,13 +21,10 @@ import org.kie.api.task.model.Status;
 import org.kie.api.task.model.Task;
 import org.kie.api.task.model.TaskSummary;
 import org.kie.internal.task.api.model.InternalTaskData;
-import org.pavanecce.cmmn.jbpm.ApplicableDiscretionaryItem;
 import org.pavanecce.cmmn.jbpm.container.AbstractPlanItemInstanceContainerTest;
-import org.pavanecce.cmmn.jbpm.lifecycle.PlanElementState;
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
 
 public class PlanningTest extends AbstractPlanItemInstanceContainerTest {
-	PlanningService planningService = new PlanningService();
+	PlanningServiceImpl planningService = new PlanningServiceImpl();
 	{
 		isJpa = true;
 	}

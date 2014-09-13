@@ -4,19 +4,15 @@
 <!ENTITY caseFileModel SYSTEM "src/test/resources/test/caseFileModel.xmlFragment">
 <!ENTITY lifecycleTestTasks SYSTEM "src/test/resources/test/controllable/complexLifecycleTestTasks.xmlFragment">
 ]>
-<cmmn:definitions xmlns:cmmn="http://www.omg.org/spec/CMMN/20121031/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:test="http://ifu-lobuntu.org/test"
-	targetNamespace="http://ifu-lobuntu.org/test">
+<cmmn:definitions xmlns:cmmn="http://www.omg.org/spec/CMMN/20131201/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/spec/CMMN/20131201/MODEL CMMN10.xsd" xmlns:test="http://ifu-lobuntu.org/test"
+	targetNamespace="http://ifu-lobuntu.org/test" xmlns:subcase="http://ifu-lobuntu.org/subcase">
 	
 	&structureDefs;
 	<cmmn:case name="CaseTaskTests" id="CaseTaskTests">
 		&caseFileModel;
 		<cmmn:casePlanModel name="CaseTaskTests">
+			&lifecycleTestTasks;
 			<cmmn:planningTable id="theRootPlanningTableId" authorizedRoleRefs="constructionProjectManagerRoleId">
-				<cmmn:applicabilityRule id="noHouseplan">
-					<cmmn:condition language="http://www.java.com/java">
-						<cmmn:body>return housePlan==null;</cmmn:body>
-					</cmmn:condition>
-				</cmmn:applicabilityRule>
 				<cmmn:discretionaryItem definitionRef="designHouseTaskId">
 					<cmmn:itemControl>
 						<cmmn:requiredRule>
@@ -26,28 +22,32 @@
 						</cmmn:requiredRule>
 					</cmmn:itemControl>
 				</cmmn:discretionaryItem>
+				<cmmn:applicabilityRule id="noHouseplan">
+					<cmmn:condition language="http://www.java.com/java">
+						<cmmn:body>return housePlan==null;</cmmn:body>
+					</cmmn:condition>
+				</cmmn:applicabilityRule>
 			</cmmn:planningTable>
-			&lifecycleTestTasks;
-			<cmmn:caseTask id="theEventGeneratingTask" name="TheCaseTask" caseRef="SubCase.cmmn#SubCase" isBlocking="true">
+			<cmmn:caseTask id="theEventGeneratingTask" name="TheCaseTask" caseRef="subcase:SubCase" isBlocking="true">
 				<cmmn:inputs bindingRef="housePlanFileItemId" id="housePlanTaskParameter" name="housePlanTaskParameter">
 				</cmmn:inputs>
 				<cmmn:inputs bindingRef="wallPlanFileItemId" id="wallPlanTaskParameter" name="wallPlanTaskParameter">
-					<bindingRefinement  language="http://www.java.com/java">
-						<body>return housePlan.getWallPlans();</body>
-					</bindingRefinement>
+					<cmmn:bindingRefinement  language="http://www.java.com/java">
+						<cmmn:body>return housePlan.getWallPlans();</cmmn:body>
+					</cmmn:bindingRefinement>
 				</cmmn:inputs>
 				<cmmn:outputs bindingRef="wallPlanFileItemId" id="wallPlanTaskOutput" name="wallPlanTaskOutput">
-					<bindingRefinement  language="http://www.java.com/java">
-						<body>return housePlan.getWallPlans();</body>
-					</bindingRefinement>
+					<cmmn:bindingRefinement  language="http://www.java.com/java">
+						<cmmn:body>return housePlan.getWallPlans();</cmmn:body>
+					</cmmn:bindingRefinement>
 				</cmmn:outputs>
 				<cmmn:outputs bindingRef="roofPlanFileItemId" id="roofPlanTaskOutput" name="roofPlanTaskOutput">
-					<bindingRefinement  language="http://www.java.com/java">
-						<body>return housePlan.getRoofPlan();</body>
-					</bindingRefinement>
+					<cmmn:bindingRefinement  language="http://www.java.com/java">
+						<cmmn:body>return housePlan.getRoofPlan();</cmmn:body>
+					</cmmn:bindingRefinement>
 				</cmmn:outputs>
-				<cmmn:parameterMapping sourceRef="housePlanTaskParameter" targetRef="SubCase.cmmn#housePlanSubCaseParameterId" />
-				<cmmn:parameterMapping sourceRef="wallPlanTaskParameter" targetRef="SubCase.cmmn#wallPlanSubCaseParameterId">
+				<cmmn:parameterMapping sourceRef="housePlanTaskParameter" targetRef="housePlanSubCaseParameterId" />
+				<cmmn:parameterMapping sourceRef="wallPlanTaskParameter" targetRef="wallPlanSubCaseParameterId">
 					<cmmn:transformation language="http://www.java.com/java">
 						<cmmn:body>
 							source.setShortDescription("I Am Transformed");
@@ -55,7 +55,7 @@
 						</cmmn:body>
 					</cmmn:transformation>
 				</cmmn:parameterMapping>
-				<cmmn:parameterMapping sourceRef="SubCase.cmmn#wallPlanSubCaseOutputId" targetRef="wallPlanTaskOutput">
+				<cmmn:parameterMapping sourceRef="wallPlanSubCaseOutputId" targetRef="wallPlanTaskOutput">
 					<cmmn:transformation language="http://www.java.com/java">
 						<cmmn:body>
 							source.setShortDescription("I Am Transformed Twice");
@@ -63,7 +63,7 @@
 						</cmmn:body>
 					</cmmn:transformation>
 				</cmmn:parameterMapping>
-				<cmmn:parameterMapping sourceRef="SubCase.cmmn#roofPlanSubCaseOutputId" targetRef="roofPlanTaskOutput">
+				<cmmn:parameterMapping sourceRef="roofPlanSubCaseOutputId" targetRef="roofPlanTaskOutput">
 					<cmmn:transformation language="http://www.java.com/java">
 						<cmmn:body>
 							source.setShortDescription("I Am Transformed Twice");

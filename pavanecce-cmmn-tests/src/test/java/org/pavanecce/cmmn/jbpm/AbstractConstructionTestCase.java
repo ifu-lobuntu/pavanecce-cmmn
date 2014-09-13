@@ -1,9 +1,9 @@
 package org.pavanecce.cmmn.jbpm;
 
-import org.pavanecce.cmmn.jbpm.lifecycle.impl.CaseInstance;
+import org.jbpm.cmmn.instance.CaseInstance;
+import org.jbpm.cmmn.test.AbstractCmmnCaseTestCase;
 import org.pavanecce.cmmn.jbpm.ocm.OcmCaseFileItemSubscriptionInfo;
 import org.pavanecce.cmmn.jbpm.ocm.OcmCaseSubscriptionInfo;
-import org.pavanecce.cmmn.jbpm.test.AbstractCmmnCaseTestCase;
 
 import test.cmmn.ConstructionCase;
 import test.cmmn.House;

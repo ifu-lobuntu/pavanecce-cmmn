@@ -1,6 +1,6 @@
 package org.pavanecce.cmmn.cfa.impl;
 
-import org.pavanecce.cmmn.jbpm.task.AbstractTaskCommand;
+import org.jbpm.cmmn.task.api.impl.AbstractTaskCommand;
 
 public abstract class AbstractConversationForActionCommand<T> extends AbstractTaskCommand<T> {
 
