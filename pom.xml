@@ -11,10 +11,8 @@
 	<artifactId>pavanecce-cmmn</artifactId>
 	<packaging>pom</packaging>
 	<modules>
-<!-- 		<module>pavanecce-cmmn-jbpm</module> -->
 <!-- 		<module>pavanecce-cmmn-jahia</module> -->
 		<module>pavanecce-cmmn-cfa</module>
-		<module>pavanecce-cmmn-tests</module>
 	</modules>
 	<profiles>
 		<profile>
