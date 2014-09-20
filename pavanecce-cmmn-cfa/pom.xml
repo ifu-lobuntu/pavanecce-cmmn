@@ -20,6 +20,17 @@
 			<version>6.2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-cmmn-test</artifactId>
+			<version>6.2.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>test</scope>
+			<version>1.0.9</version>
+		</dependency>
+		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>${environment.artifactId}</artifactId>
 			<version>${project.parent.version}</version>
@@ -35,8 +46,8 @@
 					<manifestLocation>META-INF</manifestLocation>
 					<instructions>
 						<Import-Package>
-						  org.pavanecce.cmmn.jbpm.lifecycle,
-						  org.pavanecce.cmmn.jbpm.task
+							org.pavanecce.cmmn.cfa.api,
+							org.pavanecce.cmmn.cfa.impl
 						</Import-Package>
 						<Export-Package>org.pavanecce.cmmn.cfa</Export-Package>
 						<Bundle-SymbolicName>org.pavanecce.cmmn.cfa</Bundle-SymbolicName>

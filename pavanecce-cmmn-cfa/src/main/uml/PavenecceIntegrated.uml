@@ -33,8 +33,9 @@
         <packagedElement xmi:type="uml:CallEvent" xmi:id="_n_5foCtVEeSDa8AcgulCaA" name="terminate" operation="_zbywoCtUEeSDa8AcgulCaA"/>
       </packagedElement>
       <packagedElement xmi:type="uml:CallEvent" xmi:id="_7e8UcCtkEeS1Ppi_M8XeJg" name="renegotiate" operation="_jAdXYDZcEeSP7-vK60zsxA"/>
-      <packagedElement xmi:type="uml:CallEvent" xmi:id="_miVCADZkEeSB8JRRBI1H6w" name="counterToRengotiator" operation="_gkJMUDZkEeSB8JRRBI1H6w"/>
+      <packagedElement xmi:type="uml:CallEvent" xmi:id="_miVCADZkEeSB8JRRBI1H6w" name="counterToRenegotiator" operation="_gkJMUDZkEeSB8JRRBI1H6w"/>
       <packagedElement xmi:type="uml:CallEvent" xmi:id="_mjp3sDZkEeSB8JRRBI1H6w" name="counterFromRenegotiator" operation="_jOOM8DZkEeSB8JRRBI1H6w"/>
+      <packagedElement xmi:type="uml:CallEvent" xmi:id="_y0F5wD_UEeSm6PG4bcpj3A" name="acceptNewTerms" operation="_tcQSYD_UEeSm6PG4bcpj3A"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_xzzvECtoEeS_adxi5tK3xg" name="rea">
       <ownedComment xmi:type="uml:Comment" xmi:id="_J0owMCt8EeS_adxi5tK3xg" annotatedElement="_b4znoCt5EeS_adxi5tK3xg _d0EvkCt7EeS_adxi5tK3xg">
@@ -445,10 +446,10 @@ more commitments</body>
                 <trigger xmi:type="uml:Trigger" xmi:id="_gKeTUDouEeScHpOXWsRArw" name="" event="_7e8UcCtkEeS1Ppi_M8XeJg"/>
               </transition>
               <transition xmi:type="uml:Transition" xmi:id="_g-4LwDouEeScHpOXWsRArw" name="counter" source="_zEZcITotEeScHpOXWsRArw" target="_zEZcIDotEeScHpOXWsRArw">
-                <trigger xmi:type="uml:Trigger" xmi:id="_og82EDouEeScHpOXWsRArw" event="_miVCADZkEeSB8JRRBI1H6w"/>
+                <trigger xmi:type="uml:Trigger" xmi:id="_og82EDouEeScHpOXWsRArw" event="_mjp3sDZkEeSB8JRRBI1H6w"/>
               </transition>
               <transition xmi:type="uml:Transition" xmi:id="_pu-vcDouEeScHpOXWsRArw" name="Transition15" source="_zEZcIDotEeScHpOXWsRArw" target="_zEZcITotEeScHpOXWsRArw">
-                <trigger xmi:type="uml:Trigger" xmi:id="_sxJf8DouEeScHpOXWsRArw" event="_mjp3sDZkEeSB8JRRBI1H6w"/>
+                <trigger xmi:type="uml:Trigger" xmi:id="_sxJf8DouEeScHpOXWsRArw" event="_miVCADZkEeSB8JRRBI1H6w"/>
               </transition>
               <transition xmi:type="uml:Transition" xmi:id="_kHlaYDo0EeScHpOXWsRArw" name="Transition16" guard="_Owj9ADo1EeScHpOXWsRArw" source="_zEZcIDotEeScHpOXWsRArw" target="_e0t5wCtmEeS1Ppi_M8XeJg">
                 <ownedRule xmi:type="uml:Constraint" xmi:id="_Owj9ADo1EeScHpOXWsRArw">
@@ -467,6 +468,9 @@ more commitments</body>
                   </specification>
                 </ownedRule>
                 <trigger xmi:type="uml:Trigger" xmi:id="_SFyMYDo1EeScHpOXWsRArw" event="_-XC9QCtUEeSDa8AcgulCaA"/>
+              </transition>
+              <transition xmi:type="uml:Transition" xmi:id="_9Wjy8D_UEeSm6PG4bcpj3A" name="Transition18" visibility="package" source="_zEZcIDotEeScHpOXWsRArw" target="_tSZLwCtjEeS1Ppi_M8XeJg">
+                <trigger xmi:type="uml:Trigger" xmi:id="_BYFusD_VEeSm6PG4bcpj3A" event="_y0F5wD_UEeSm6PG4bcpj3A"/>
               </transition>
               <subvertex xmi:type="uml:Pseudostate" xmi:id="_tSZLvStjEeS1Ppi_M8XeJg" name="Initial0"/>
               <subvertex xmi:type="uml:State" xmi:id="_tSZLwCtjEeS1Ppi_M8XeJg" name="InProgress"/>
@@ -606,6 +610,7 @@ more commitments</body>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_jAdXYDZcEeSP7-vK60zsxA" name="renegotiate"/>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_gkJMUDZkEeSB8JRRBI1H6w" name="counterToRenegotiator"/>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_jOOM8DZkEeSB8JRRBI1H6w" name="counterFromRenegotiator"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="_tcQSYD_UEeSm6PG4bcpj3A" name="acceptNewTerms"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="_b4znoCt5EeS_adxi5tK3xg" name="CommitmentValueAdd" memberEnd="_b4znoSt5EeS_adxi5tK3xg _b4zAkCt5EeS_adxi5tK3xg">
         <ownedEnd xmi:type="uml:Property" xmi:id="_b4znoSt5EeS_adxi5tK3xg" name="commitment" type="_2ituMCtoEeS_adxi5tK3xg" association="_b4znoCt5EeS_adxi5tK3xg">

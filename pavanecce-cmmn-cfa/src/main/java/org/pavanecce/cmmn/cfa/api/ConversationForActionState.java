@@ -1,54 +1,59 @@
 package org.pavanecce.cmmn.cfa.api;
 
+import org.pavanecce.cmmn.cfa.impl.ConversationActImpl;
+import static org.pavanecce.cmmn.cfa.api.ConversationActKind.*;
+
 public enum ConversationForActionState {
-	REQUESTED {
-		public void promise(ConversationForAction n) {
-			n.setState(PROMISED);
+	REQUESTED(PROMISE, COUNTER_TO_INITIATOR) {
+		public void promise(ConversationActImpl n) {
+			n.setResultingConversationState(PROMISED);
 		}
 
-		public void withdraw(ConversationForAction n) {
-			n.setState(NEGOTIATION_FAILED);
+		public void withdraw(ConversationActImpl n) {
+			n.setResultingConversationState(NEGOTIATION_FAILED);
 		}
 
-		public void reject(ConversationForAction n) {
-			n.setState(NEGOTIATION_FAILED);
+		public void reject(ConversationActImpl n) {
+			n.setResultingConversationState(NEGOTIATION_FAILED);
 		}
 
-		public void counterToA(ConversationForAction n) {
-			n.setState(COUNTERED);
+		public void counterToInitiator(ConversationActImpl n) {
+			n.setResultingConversationState(COUNTERED);
 		}
-
 	},
 	PROMISED {
-		public void accept(ConversationForAction n) {
-			n.setState(COMMITTED);
+		public void accept(ConversationActImpl n) {
+			n.setResultingConversationState(COMMITTED);
 		}
 	},
 	COUNTERED {
-		public void accept(ConversationForAction n) {
-			n.setState(COMMITTED);
+		public void accept(ConversationActImpl n) {
+			n.setResultingConversationState(COMMITTED);
 		}
-		public void withdraw(ConversationForAction n) {
-			if(n.isCommitted()){
-				n.setState(WITHDRAWN);
-			}else{
-				n.setState(NEGOTIATION_FAILED);
+
+		public void withdraw(ConversationActImpl n) {
+			if (n.isCommitted()) {
+				n.setResultingConversationState(WITHDRAWN);
+			} else {
+				n.setResultingConversationState(NEGOTIATION_FAILED);
 			}
 		}
 
-		public void counterToB(ConversationForAction n) {
-			if(n.isCommitted()){
+		public void counterToOwner(ConversationActImpl n) {
+			if (n.isCommitted()) {
 				throw new UnsupportedOperationException("counterToB can only be called if the negotation is not yet committed to");
-			}else{
-				n.setState(REQUESTED);
+			} else {
+				n.setResultingConversationState(REQUESTED);
 			}
 		}
+
 		@Override
-		public void counterToRenegotiator(ConversationForAction n) {
-			if(n.isCommitted()){
-				n.setState(RENEGOTIATION_REQUESTED);
-			}else{
-				throw new UnsupportedOperationException("counterToRenegotiator can only be called if the negotation was previously committed to");
+		public void counterToRenegotiator(ConversationActImpl n) {
+			if (n.isCommitted()) {
+				n.setResultingConversationState(RENEGOTIATION_REQUESTED);
+			} else {
+				throw new UnsupportedOperationException(
+						"counterToRenegotiator can only be called if the negotation was previously committed to");
 			}
 		}
 	},
@@ -56,97 +61,117 @@ public enum ConversationForActionState {
 	},
 	COMMITTED {
 		@Override
-		public void start(ConversationForAction n) {
-			n.setState(IN_PROGRESS);
+		public void start(ConversationActImpl n) {
+			n.setResultingConversationState(IN_PROGRESS);
 		}
 	},
 	RENEGOTIATION_REQUESTED {
-		public void accept(ConversationForAction n) {
-			n.setState(COMMITTED);
+		public void acceptNewTerms(ConversationActImpl n) {
+			n.setResultingConversationState(COMMITTED);
 		}
 
-		public void withdraw(ConversationForAction n) {
-			n.setState(NEGOTIATION_FAILED);
+		public void withdraw(ConversationActImpl n) {
+			n.setResultingConversationState(NEGOTIATION_FAILED);
 		}
 
-		public void reject(ConversationForAction n) {
-			n.setState(NEGOTIATION_FAILED);
+		public void reject(ConversationActImpl n) {
+			n.setResultingConversationState(NEGOTIATION_FAILED);
 		}
 
-		public void counterToA(ConversationForAction n) {
-			n.setState(COUNTERED);
+		public void counterToInitiator(ConversationActImpl n) {
+			n.setResultingConversationState(COUNTERED);
 		}
 	},
-	IN_PROGRESS{
+	IN_PROGRESS {
 		@Override
-		public void assertCompletion(ConversationForAction n) {
-			n.setState(AWAITING_ACCEPTANCE);
+		public void assertCompletion(ConversationActImpl n) {
+			n.setResultingConversationState(AWAITING_ACCEPTANCE);
 		}
 	},
-	AWAITING_ACCEPTANCE{
+	AWAITING_ACCEPTANCE {
 		@Override
-		public void declareAdequate(ConversationForAction n) {
-			n.setState(CONSUMMATED);
+		public void declareAdequate(ConversationActImpl n) {
+			n.setResultingConversationState(CONSUMMATED);
 		}
 	},
-	CONSUMMATED{
+	CONSUMMATED {
 	},
 	WITHDRAWN {
 	},
 	RENEGUED {
 	};
 
-	private ConversationForActionState() {
+	private ConversationActKind[] allowedActs;
+
+	private ConversationForActionState(ConversationActKind... allowedActs) {
+		this.allowedActs = allowedActs;
 	}
 
-	public void promise(ConversationForAction n) {
+	public boolean isAllowed(ConversationActKind act) {
+		for (ConversationActKind conversationActKind : allowedActs) {
+			if (conversationActKind == act) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void promise(ConversationActImpl n) {
 		throw new UnsupportedOperationException(this.name() + " does not support the operation 'promise'");
 	}
 
-	public void accept(ConversationForAction n) {
+	public void accept(ConversationActImpl n) {
 		throw new UnsupportedOperationException(this.name() + " does not support the operation 'accept'");
 	}
-	public void start(ConversationForAction n) {
+
+	public void start(ConversationActImpl n) {
 		throw new UnsupportedOperationException(this.name() + " does not support the operation 'start'");
 	}
 
-	public void withdraw(ConversationForAction n) {
+	public void withdraw(ConversationActImpl n) {
 		throw new UnsupportedOperationException(this.name() + " does not support the operation 'withdraw'");
 	}
 
-	public void reject(ConversationForAction n) {
+	public void reject(ConversationActImpl n) {
 		throw new UnsupportedOperationException(this.name() + " does not support the operation 'reject'");
 
 	}
 
-	public void counterToA(ConversationForAction n) {
+	public void counterToInitiator(ConversationActImpl n) {
 		throw new UnsupportedOperationException(this.name() + " does not support the operation 'counterToA'");
 	}
 
-	public void counterToB(ConversationForAction n) {
+	public void counterToOwner(ConversationActImpl n) {
 		throw new UnsupportedOperationException(this.name() + " does not support the operation 'counterToB'");
 	}
 
-	public void counterToRenegotiator(ConversationForAction n) {
+	public void declareAdequate(ConversationActImpl n) {
+		throw new UnsupportedOperationException(this.name() + " does not support the operation 'declareAdequate'");
+	}
+
+	public void declareInadequate(ConversationAct n) {
+		throw new UnsupportedOperationException(this.name() + " does not support the operation 'counterFromRenegotiator'");
+	}
+
+	public void assertCompletion(ConversationActImpl n) {
+		throw new UnsupportedOperationException(this.name() + " does not support the operation 'assertCompletion'");
+	}
+
+	public void renege(ConversationAct n) {
+		throw new UnsupportedOperationException(this.name() + " does not support the operation 'renegue'");
+	}
+
+	public void acceptNewTerms(ConversationAct n) {
+		throw new UnsupportedOperationException(this.name() + " does not support the operation 'renegue'");
+	}
+
+	public void counterToRenegotiator(ConversationActImpl n) {
 		throw new UnsupportedOperationException(this.name() + " does not support the operation 'counterToRenegotiator'");
 
 	}
 
-	public void declareAdequate(ConversationForAction n) {
-		throw new UnsupportedOperationException(this.name() + " does not support the operation 'declareAdequate'");
-	}
-	public void declareInadequate(ConversationForAction n) {
-		throw new UnsupportedOperationException(this.name() + " does not support the operation 'counterFromRenegotiator'");
-	}
-	public void assertCompletion(ConversationForAction n) {
-		throw new UnsupportedOperationException(this.name() + " does not support the operation 'assertCompletion'");
-	}
-	public void counterFromRenegotiator(ConversationForAction n) {
+	public void counterFromRenegotiator(ConversationAct n) {
 		throw new UnsupportedOperationException(this.name() + " does not support the operation 'counterFromRenegotiator'");
 	}
 
-	public void renegue(ConversationForAction n) {
-		throw new UnsupportedOperationException(this.name() + " does not support the operation 'renegue'");
-
-	}
 }
