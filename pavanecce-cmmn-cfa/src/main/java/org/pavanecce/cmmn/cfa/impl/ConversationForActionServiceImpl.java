@@ -75,8 +75,7 @@ public class ConversationForActionServiceImpl implements ConversationForActionSe
 
 	@Override
 	public void start(String userId, long conversationActId, String comment) {
-		// TODO Auto-generated method stub
-
+		taskService.execute(new StartCommand(userId, conversationActId, comment));
 	}
 
 	@Override
@@ -110,9 +109,8 @@ public class ConversationForActionServiceImpl implements ConversationForActionSe
 	}
 
 	@Override
-	public void assertComplete(String userId, long conversationActId, String comment) {
-		// TODO Auto-generated method stub
-
+	public void assertComplete(String userId, long conversationActId, Map<String, Object> output, String comment) {
+		taskService.execute(new AssertCompleteCommand(userId, conversationActId, output, comment));
 	}
 
 	@Override
@@ -123,12 +121,21 @@ public class ConversationForActionServiceImpl implements ConversationForActionSe
 
 	@Override
 	public void declareAdequate(String userId, long conversationActId, String comment) {
-		// TODO Auto-generated method stub
-
+		taskService.execute(new DeclareAdequateCommand(userId, conversationActId, comment));
 	}
 
 	@Override
 	public Map<String, Object> getContentMap(long conversationForActionId, long contentId) {
 		return taskService.execute(new GetContentMapCommand(conversationForActionId, contentId));
+	}
+
+	@Override
+	public List<ConversationForActionSummary> getOwnedCommitments(String userId) {
+		return taskService.execute(new GetOwnedCommitmentsCommand(userId));
+	}
+
+	@Override
+	public List<ConversationForActionSummary> getInitiatedCommitments(String userId) {
+		return taskService.execute(new GetInitiatedCommitmentsCommand(userId));
 	}
 }

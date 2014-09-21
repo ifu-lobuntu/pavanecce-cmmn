@@ -6,6 +6,8 @@ import java.util.Map;
 
 public interface ConversationForActionService {
 	Collection<ConversationForActionSummary> getPotentialWork(String userId);
+	Collection<ConversationForActionSummary> getOwnedCommitments(String userId);
+	Collection<ConversationForActionSummary> getInitiatedCommitments(String userId);
 	List<ConversationActSummary> getPendingRequests(String userId);
 	void addConversation(String userId, ConversationForAction c, NegotiationStep request);
 	void requestDirectly(String userId,  String ownerId, ConversationForAction c, NegotiationStep request);
@@ -22,7 +24,7 @@ public interface ConversationForActionService {
 	void counterToRenegotiator(String userId,  NegotiationStep request);
 	void counterFromRenegotiator(String userId,  NegotiationStep request);
 	void renege(String userId,  long conversationActId, Map<String, Object> fault);
-	void assertComplete(String userId,  long conversationActId, String comment);
+	void assertComplete(String userId,  long conversationActId, Map<String, Object> output, String comment);
 	void declareInadequate(String userId,  long conversationActId, String comment);
 	void declareAdequate(String userId,  long conversationActId, String comment);
 	

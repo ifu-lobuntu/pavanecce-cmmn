@@ -17,12 +17,10 @@ public class GetContentMapCommand extends AbstractConversationForActionCommand<M
 		super.taskId=conversationForActionId;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> execute() {
-		Content c = taskContext.getTaskContentService().getContentById(contentId);
-		ContentMarshallerContext mc = taskContext.getTaskContentService().getMarshallerContext(getTaskById(taskId));
-		return (Map<String, Object>) ContentMarshallerHelper.unmarshall(c.getContent(), mc.getEnvironment());
+		return getContentAsMap(contentId);
 	}
+
 
 }

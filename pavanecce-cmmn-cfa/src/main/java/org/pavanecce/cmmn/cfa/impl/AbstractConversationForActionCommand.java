@@ -7,13 +7,18 @@ import java.util.Map;
 
 import org.jbpm.cmmn.task.api.impl.AbstractTaskCommand;
 import org.jbpm.services.task.impl.model.UserImpl;
+import org.jbpm.services.task.utils.ContentMarshallerHelper;
 import org.kie.api.task.model.Content;
-import org.kie.api.task.model.Group;
 import org.kie.api.task.model.OrganizationalEntity;
 import org.kie.api.task.model.User;
+import org.kie.internal.task.api.ContentMarshallerContext;
 import org.kie.internal.task.api.TaskModelProvider;
 import org.kie.internal.task.api.model.InternalContent;
+import org.kie.internal.task.api.model.InternalTaskData;
+import org.pavanecce.cmmn.cfa.api.ConversationAct;
+import org.pavanecce.cmmn.cfa.api.ConversationActKind;
 import org.pavanecce.cmmn.cfa.api.ConversationForAction;
+import org.pavanecce.cmmn.cfa.api.InternalConversationForAction;
 
 public abstract class AbstractConversationForActionCommand<T> extends AbstractTaskCommand<T> {
 
@@ -27,14 +32,18 @@ public abstract class AbstractConversationForActionCommand<T> extends AbstractTa
 		super();
 	}
 
-	protected ConversationActImpl createResponseCopy(long previousId) {
+	protected ConversationActImpl createResponseCopy(long previousId, ConversationActKind kind) {
 		ConversationActImpl previous = find(ConversationActImpl.class, previousId);
-		return createResponseCopy(previous);
+		return createResponseCopy(previous,kind);
 	}
 
-	protected ConversationActImpl createResponseCopy(ConversationActImpl previous) {
-		ConversationActImpl result= new ConversationActImpl();
-		result.setConversationForAction(previous.getConversationForAction());
+	protected ConversationActImpl createResponseCopy(ConversationActImpl previous,ConversationActKind kind) {
+		//TODO validate 'kind' against user and previous state
+		ConversationActImpl result = new ConversationActImpl();
+		result.setKind(kind);
+		InternalConversationForAction icfa = (InternalConversationForAction) previous.getConversationForAction();
+		icfa.setCurrentAct(result);
+		result.setConversationForAction(icfa);
 		result.setFaultContentId(maybeCloneContent(previous.getFaultContentId()));
 		result.setFaultName(previous.getFaultName());
 		result.setFaultType(previous.getFaultType());
@@ -56,6 +65,18 @@ public abstract class AbstractConversationForActionCommand<T> extends AbstractTa
 		result.setResponsePending(true);
 		return result;
 	}
+	protected void acceptCommitment(ConversationAct accept) {
+		InternalConversationForAction cfa = (InternalConversationForAction) accept.getConversationForAction();
+		cfa.setCommitment(accept);
+		InternalTaskData itd = (InternalTaskData) cfa.getTaskData();
+		super.taskId=cfa.getId();
+		Map<String, Object> inputMap=Collections.<String,Object>singletonMap("key", getContentAsMap(accept.getInputContentId()));
+		itd.setDocumentContentId(ensureContentIdPresent(cfa, itd.getDocumentContentId(), inputMap, "key"));
+		Map<String, Object> outputMap=Collections.<String,Object>singletonMap("key", getContentAsMap(accept.getOutputContentId()));
+		itd.setOutputContentId(ensureContentIdPresent(cfa, itd.getOutputContentId(), outputMap, "key"));
+		//TODO implement deadlines implied by dateOfCommencement and dateOfCompletion
+	}
+
 
 	private long maybeCloneContent(long contentId) {
 		if (contentId >= 0) {
@@ -70,9 +91,9 @@ public abstract class AbstractConversationForActionCommand<T> extends AbstractTa
 		return -1;
 	}
 
-	protected long ensureContentIdPresent(ConversationForAction cfa, Map<String, Object> input) {
+	protected long ensureContentIdPresent(ConversationForAction cfa,long contentId, Map<String, Object> input) {
 		Map<String, Object> map = Collections.<String, Object> singletonMap("key", input);
-		long ensureContentIdPresent = ensureContentIdPresent(cfa, -1, map, "key");
+		long ensureContentIdPresent = ensureContentIdPresent(cfa, contentId, map, "key");
 		return ensureContentIdPresent;
 	}
 
@@ -95,7 +116,7 @@ public abstract class AbstractConversationForActionCommand<T> extends AbstractTa
 						break;
 					}
 				} else {
-					if(getUsersGroups().contains(oe.getId())){
+					if (getUsersGroups().contains(oe.getId())) {
 						isUserInOrgEntities = true;
 						break;
 					}
@@ -111,6 +132,13 @@ public abstract class AbstractConversationForActionCommand<T> extends AbstractTa
 			isUserInitiator = true;
 		}
 		return isUserInitiator;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected Map<String, Object> getContentAsMap(long contentId2) {
+		Content c = taskContext.getTaskContentService().getContentById(contentId2);
+		ContentMarshallerContext mc = taskContext.getTaskContentService().getMarshallerContext(getTaskById(taskId));
+		return (Map<String, Object>) ContentMarshallerHelper.unmarshall(c.getContent(), mc.getEnvironment());
 	}
 
 }

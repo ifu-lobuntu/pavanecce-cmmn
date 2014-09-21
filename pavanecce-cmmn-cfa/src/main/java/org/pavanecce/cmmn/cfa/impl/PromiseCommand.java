@@ -20,8 +20,7 @@ public class PromiseCommand extends AbstractConversationForActionCommand<Void> {
 	@Override
 	public Void execute() {
 		ConversationActImpl previous = find(ConversationActImpl.class, conversationActId);
-		ConversationActImpl response = super.createResponseCopy(previous);
-		response.setKind(ConversationActKind.PROMISE);
+		ConversationActImpl response = super.createResponseCopy(previous,ConversationActKind.PROMISE);
 		response.setResultingConversationState(ConversationForActionState.PROMISED);
 		response.setComment(comment);
 		boolean wasDirectRequest = previous.getOwner() != null && previous.getOwner().getId().equals(userId);

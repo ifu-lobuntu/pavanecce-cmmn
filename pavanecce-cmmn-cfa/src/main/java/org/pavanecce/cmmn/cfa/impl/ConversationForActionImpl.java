@@ -2,6 +2,7 @@ package org.pavanecce.cmmn.cfa.impl;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToOne;
 
@@ -18,12 +19,21 @@ public class ConversationForActionImpl extends PlannableTaskImpl implements Inte
 
 	@OneToOne
 	private ConversationActImpl commitment;
+	@OneToOne
+	private ConversationActImpl currentAct;
 
 	@OneToOne
 	private ConversationActImpl outcome;
 
-	@Enumerated
-	ConversationForActionState state;
+	@Enumerated(EnumType.STRING)
+	private ConversationForActionState conversationState;
+	@Override
+	public ConversationAct getCurrentAct() {
+		return currentAct;
+	}
+	public void setCurrentAct(ConversationAct currentAct) {
+		this.currentAct = (ConversationActImpl) currentAct;
+	}
 	@Override
 	public ConversationAct getRequest() {
 		return request;
@@ -39,24 +49,24 @@ public class ConversationForActionImpl extends PlannableTaskImpl implements Inte
 		return outcome;
 	}
 
-	public ConversationForActionState getState() {
-		return state;
+	public ConversationForActionState getConversationState() {
+		return conversationState;
 	}
 
-	public void setState(ConversationForActionState state) {
-		this.state = state;
+	public void setConversationState(ConversationForActionState state) {
+		this.conversationState = state;
 	}
 
-	public void setRequest(ConversationActImpl request) {
-		this.request = request;
+	public void setRequest(ConversationAct  request) {
+		this.request = (ConversationActImpl) request;
 	}
 
-	public void setCommitment(ConversationActImpl commitment) {
-		this.commitment = commitment;
+	public void setCommitment(ConversationAct commitment) {
+		this.commitment = (ConversationActImpl) commitment;
 	}
 
-	public void setOutcome(ConversationActImpl outcome) {
-		this.outcome = outcome;
+	public void setOutcome(ConversationAct outcome) {
+		this.outcome = (ConversationActImpl) outcome;
 	}
 	
 

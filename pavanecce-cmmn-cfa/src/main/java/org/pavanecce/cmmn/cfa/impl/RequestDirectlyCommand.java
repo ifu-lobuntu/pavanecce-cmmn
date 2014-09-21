@@ -46,7 +46,7 @@ public class RequestDirectlyCommand extends AbstractConversationForActionCommand
 			taskData = (InternalTaskData) TaskModelProvider.getFactory().newTaskData();
 			cfa.setTaskData(taskData);
 		}
-		taskData.setDocumentContentId(ensureContentIdPresent(cfa, negotiationStep.getInput()));
+		taskData.setDocumentContentId(ensureContentIdPresent(cfa, taskData.getDocumentContentId(), negotiationStep.getInput()));
 		taskData.setStatus(Status.Ready);
 		InternalPeopleAssignments peopleAssignments = (InternalPeopleAssignments) cfa.getPeopleAssignments();
 		if (peopleAssignments == null) {
@@ -70,8 +70,8 @@ public class RequestDirectlyCommand extends AbstractConversationForActionCommand
 		act.setConversationForAction(cfa);
 		act.setDateOfCommencement(negotiationStep.getDateOfCommencement());
 		act.setDateOfCompletion(negotiationStep.getDateOfCompletion());
-		act.setInputContentId(ensureContentIdPresent(cfa, negotiationStep.getInput()));
-		act.setOutputContentId(ensureContentIdPresent(cfa, negotiationStep.getOutput()));
+		act.setInputContentId(ensureContentIdPresent(cfa, act.getInputContentId(),  negotiationStep.getInput()));
+		act.setOutputContentId(ensureContentIdPresent(cfa, act.getOutputContentId(), negotiationStep.getOutput()));
 		act.setKind(ConversationActKind.REQUEST);
 		act.setOwner(owner);
 		act.setResponsePending(true);

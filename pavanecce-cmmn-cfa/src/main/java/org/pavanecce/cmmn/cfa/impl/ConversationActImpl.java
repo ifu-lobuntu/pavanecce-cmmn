@@ -147,7 +147,7 @@ public class ConversationActImpl implements ConversationAct {
 		return resultingConversationState;
 	}
 
-	public ConversationForActionImpl getConversationForAction() {
+	public ConversationForAction getConversationForAction() {
 		return conversationForAction;
 	}
 
@@ -191,8 +191,8 @@ public class ConversationActImpl implements ConversationAct {
 		return addressedTo;
 	}
 
-	public void setAddressedTo(OrganizationalEntityImpl addressedTo) {
-		this.addressedTo = addressedTo;
+	public void setAddressedTo(OrganizationalEntity user) {
+		this.addressedTo = (OrganizationalEntityImpl) user;
 	}
 
 	public UserImpl getActor() {
