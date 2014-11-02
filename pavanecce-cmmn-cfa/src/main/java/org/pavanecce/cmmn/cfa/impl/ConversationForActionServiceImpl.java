@@ -81,6 +81,7 @@ public class ConversationForActionServiceImpl implements ConversationForActionSe
 
 	@Override
 	public void acceptNewTerms(String userId, long conversationActId, String comment) {
+		taskService.execute(new AcceptNewTermsCommand(userId, conversationActId, comment));
 	}
 
 	@Override

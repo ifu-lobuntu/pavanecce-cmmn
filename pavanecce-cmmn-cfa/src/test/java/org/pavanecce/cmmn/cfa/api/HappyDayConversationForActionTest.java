@@ -95,6 +95,10 @@ public class HappyDayConversationForActionTest extends AbstractConversationForAc
 		ConversationActSummary accept = service.getPendingRequests("Spielman").get(0);
 		service.start("Spielman", accept.getActId(), "I'm starting");
 		// Then
+		assertEquals(0, service.getPendingRequests("Spielman").size());
+		assertEquals(0, service.getPendingRequests("Ampie").size());
+		assertEquals(1, service.getOwnedCommitments("Spielman").size());
+		assertEquals(1, service.getInitiatedCommitments("Ampie").size());
 		List<TaskSummary> spielmansInbox = getTaskService().getTasksOwned("Spielman", "en-UK");
 		assertEquals(1, spielmansInbox.size());
 		TaskSummary task = spielmansInbox.get(0);

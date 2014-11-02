@@ -55,7 +55,7 @@
 			from
 			ConversationForActionImpl t
 			where
-			t.commitment.owner.id = :userId and
+			t.commitment.owner.id = :userId  and
 			t.conversationState <> 'CONSUMMATED'
 			order by t.id DESC
 			]]>

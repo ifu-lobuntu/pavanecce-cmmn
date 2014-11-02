@@ -41,24 +41,7 @@ public abstract class AbstractConversationForActionCommand<T> extends AbstractTa
 
 	protected ConversationActImpl createResponseCopy(InternalConversationAct previous, ConversationActKind kind) {
 		validatePreviousState(previous, kind);
-		// TODO validate allowedConversationRole
-		switch (kind.getAllowedRole()) {
-		case Any:
-			//fine
-			break;
-		case CounterNegotiator:
-			//the participant that is NOT the negotiator
-			break;
-		case Initiator:
-			//obvious
-			break;
-		case Owner:
-			//obvious
-			break;
-		case Renegotiator:
-			//negotiaor
-			break;
-		}
+		validateRole(previous, kind);
 		ConversationActImpl result = new ConversationActImpl();
 		result.setKind(kind);
 		InternalConversationForAction icfa = (InternalConversationForAction) previous.getConversationForAction();
@@ -87,6 +70,32 @@ public abstract class AbstractConversationForActionCommand<T> extends AbstractTa
 		}
 		result.setResponsePending(true);
 		return result;
+	}
+
+	protected void validateRole(InternalConversationAct previous, ConversationActKind kind) {
+		switch (kind.getAllowedRole()) {
+		case Any:
+			//fine
+			break;
+		case CounterNegotiator:
+			//the participant that is NOT the negotiator
+			break;
+		case Initiator:
+			String initatiorId = previous.getConversationForAction().getPeopleAssignments().getTaskInitiator().getId();
+			if(!userId.equals(initatiorId)){
+				throw new IllegalStateException("Only the initiator, '" + initatiorId +"' is allowed to " +kind.name());
+			}
+			break;
+		case Owner:
+			String ownerId = previous.getOwner().getId();
+			if(!userId.equals(ownerId)){
+				throw new IllegalStateException("Only the owner, '" + ownerId +"' is allowed to " +kind.name());
+			}
+			break;
+		case Renegotiator:
+			//negotiaor
+			break;
+		}
 	}
 
 	protected boolean updatesCurrentAct(ConversationActKind kind, InternalConversationForAction icfa) {

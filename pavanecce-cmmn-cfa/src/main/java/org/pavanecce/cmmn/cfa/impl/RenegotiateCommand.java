@@ -19,15 +19,21 @@ public class RenegotiateCommand extends AbstractConversationForActionCommand<Voi
 	@Override
 	public Void execute() {
 		ConversationActImpl previous = find(ConversationActImpl.class, request.getPreviousActId());
-		ConversationActImpl counter = super.createResponseCopy(previous, ConversationActKind.RENEGOTIATE);
+		ConversationActImpl renegotiation = super.createResponseCopy(previous, ConversationActKind.RENEGOTIATE);
+		renegotiation.setRenegotiator(renegotiation.getActor());
+		if(renegotiation.getActor().getId().equals(renegotiation.getOwner().getId())){
+			renegotiation.setAddressedTo(renegotiation.getConversationForAction().getPeopleAssignments().getTaskInitiator());
+		}else{
+			renegotiation.setAddressedTo(renegotiation.getOwner());
+		}
 		ConversationForAction cfa = previous.getConversationForAction();
-		counter.setDateOfCommencement(request.getDateOfCommencement());
-		counter.setDateOfCompletion(request.getDateOfCompletion());
-		counter.setInputContentId(ensureContentIdPresent(cfa, counter.getOutputContentId(), request.getInput()));
-		counter.setOutputContentId(ensureContentIdPresent(cfa, counter.getOutputContentId(), request.getOutput()));
-		counter.setResultingConversationState(ConversationForActionState.RENEGOTIATION_REQUESTED);
-		counter.setComment(request.getComment());
-		persist(counter);
+		renegotiation.setDateOfCommencement(request.getDateOfCommencement());
+		renegotiation.setDateOfCompletion(request.getDateOfCompletion());
+		renegotiation.setInputContentId(ensureContentIdPresent(cfa, renegotiation.getOutputContentId(), request.getInput()));
+		renegotiation.setOutputContentId(ensureContentIdPresent(cfa, renegotiation.getOutputContentId(), request.getOutput()));
+		renegotiation.setResultingConversationState(ConversationForActionState.RENEGOTIATION_REQUESTED);
+		renegotiation.setComment(request.getComment());
+		persist(renegotiation);
 		return null;
 	}
 }

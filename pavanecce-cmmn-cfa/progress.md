@@ -32,7 +32,15 @@ Specify ContractService
 - commit to contract
 - consummate contract
 
-Introduce custom state transitions for CMMN planning elements ( Do this in a separate project):
+Introduce custom state transitions for CMMN planning elements: 
+- Do this in a separate project.
+- LifeCycleProvider (associate with human tasks (and stages?)
+- pv:nonStandardEvent lifecycleProvider="theId"
+
+Introduce custom state transitions for CaseFileItems: 
+- Do this in above mentioned project.
+- LifeCycle  associate with caseFileItems, list transitions
+- pv:nonStandardEvent lifecycleProvider="theId"
 
 Add a 'correlation key' parameter, the central product/offering the initiator is interested in 
 - for use in VDML
