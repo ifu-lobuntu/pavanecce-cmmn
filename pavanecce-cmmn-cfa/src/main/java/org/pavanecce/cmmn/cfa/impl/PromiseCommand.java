@@ -1,7 +1,9 @@
 package org.pavanecce.cmmn.cfa.impl;
 
 import org.pavanecce.cmmn.cfa.api.ConversationActKind;
+import org.pavanecce.cmmn.cfa.api.ConversationForAction;
 import org.pavanecce.cmmn.cfa.api.ConversationForActionState;
+import org.pavanecce.cmmn.cfa.api.InternalConversationForAction;
 
 public class PromiseCommand extends AbstractConversationForActionCommand<Void> {
 
@@ -23,12 +25,7 @@ public class PromiseCommand extends AbstractConversationForActionCommand<Void> {
 		ConversationActImpl response = super.createResponseCopy(previous,ConversationActKind.PROMISE);
 		response.setResultingConversationState(ConversationForActionState.PROMISED);
 		response.setComment(comment);
-		boolean wasDirectRequest = previous.getOwner() != null && previous.getOwner().getId().equals(userId);
-		if (wasDirectRequest) {
-			previous.setResponsePending(false);
-		} else {
-			previous.setResponsePending(true);
-		}
+		ConversationForAction conversationForAction = previous.getConversationForAction();
 		persist(response);
 		return null;
 	}

@@ -1,5 +1,9 @@
 package org.pavanecce.cmmn.cfa.api;
 
+import java.util.Date;
+
+import org.jbpm.services.task.impl.model.OrganizationalEntityImpl;
+import org.jbpm.services.task.impl.model.UserImpl;
 import org.kie.api.task.model.OrganizationalEntity;
 
 public interface ConversationAct {
@@ -25,6 +29,18 @@ public interface ConversationAct {
 
 	OrganizationalEntity getOwner();
 
-	Long getId();
+	long getId();
+
+	boolean isDispute();
+
+	String getComment();
+
+	UserImpl getActor();
+
+	OrganizationalEntityImpl getAddressedTo();
+
+	Date getDateOfCompletion();
+
+	Date getDateOfCommencement();
 
 }

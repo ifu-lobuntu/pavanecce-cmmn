@@ -81,6 +81,7 @@ public class RequestDirectlyCommand extends AbstractConversationForActionCommand
 		super.fireBeforeTaskAddedEvent(cfa);
 		super.persist(act);
 		cfa.setRequest(act);
+		cfa.setCurrentAct(act);
 		super.taskPersistenceContext.updateTask(cfa);
 		super.fireAfterTaskAddedEvent(cfa);
 		return null;

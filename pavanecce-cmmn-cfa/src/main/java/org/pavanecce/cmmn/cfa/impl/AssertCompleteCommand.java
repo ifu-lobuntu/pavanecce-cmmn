@@ -29,7 +29,6 @@ public class AssertCompleteCommand extends AbstractConversationForActionCommand<
 	public Void execute() {
 		ConversationActImpl previous = find(ConversationActImpl.class, conversationActId);
 		ConversationActImpl response = super.createResponseCopy(previous, ConversationActKind.ASSERT);
-		previous.setResponsePending(false);
 		ConversationForAction cfa = previous.getConversationForAction();
 		response.setAddressedTo(cfa.getPeopleAssignments().getTaskInitiator());
 		response.setOutputContentId(ensureContentIdPresent(cfa,response.getOutputContentId(),  output));

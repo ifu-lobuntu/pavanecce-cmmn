@@ -24,7 +24,6 @@ public class StartCommand extends AbstractConversationForActionCommand<Void> {
 		ConversationActImpl response = super.createResponseCopy(previous,ConversationActKind.START);
 		response.setResultingConversationState(ConversationForActionState.IN_PROGRESS);
 		response.setComment(comment);
-		previous.setResponsePending(false);
 		persist(response);
 		((InternalConversationForAction) previous.getConversationForAction()).setConversationState(ConversationForActionState.IN_PROGRESS);
 		getTaskInstanceService().start(previous.getConversationForAction().getId(), userId);

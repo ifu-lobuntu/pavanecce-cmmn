@@ -26,7 +26,6 @@ public class DeclareAdequateCommand extends AbstractConversationForActionCommand
 		response.setComment(comment);
 		InternalConversationForAction cfa = (InternalConversationForAction) previous.getConversationForAction();
 		cfa.setOutcome(response);
-		response.setResponsePending(false);
 		persist(response);
 		taskId=cfa.getId();
 		((InternalConversationForAction) previous.getConversationForAction()).setConversationState(ConversationForActionState.CONSUMMATED);

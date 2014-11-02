@@ -28,8 +28,6 @@ public interface ConversationActSummary extends QuickTaskSummary {
 
 	OrganizationalEntity getOwner();
 
-	Long getId();
-
 	Date getDateOfCommencement();
 
 	Date getDateOfCompletion();

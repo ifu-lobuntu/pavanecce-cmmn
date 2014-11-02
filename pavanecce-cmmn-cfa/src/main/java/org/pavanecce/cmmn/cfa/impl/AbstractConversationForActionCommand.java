@@ -18,6 +18,8 @@ import org.kie.internal.task.api.model.InternalTaskData;
 import org.pavanecce.cmmn.cfa.api.ConversationAct;
 import org.pavanecce.cmmn.cfa.api.ConversationActKind;
 import org.pavanecce.cmmn.cfa.api.ConversationForAction;
+import org.pavanecce.cmmn.cfa.api.ConversationForActionState;
+import org.pavanecce.cmmn.cfa.api.InternalConversationAct;
 import org.pavanecce.cmmn.cfa.api.InternalConversationForAction;
 
 public abstract class AbstractConversationForActionCommand<T> extends AbstractTaskCommand<T> {
@@ -34,15 +36,36 @@ public abstract class AbstractConversationForActionCommand<T> extends AbstractTa
 
 	protected ConversationActImpl createResponseCopy(long previousId, ConversationActKind kind) {
 		ConversationActImpl previous = find(ConversationActImpl.class, previousId);
-		return createResponseCopy(previous,kind);
+		return createResponseCopy(previous, kind);
 	}
 
-	protected ConversationActImpl createResponseCopy(ConversationActImpl previous,ConversationActKind kind) {
-		//TODO validate 'kind' against user and previous state
+	protected ConversationActImpl createResponseCopy(InternalConversationAct previous, ConversationActKind kind) {
+		validatePreviousState(previous, kind);
+		// TODO validate allowedConversationRole
+		switch (kind.getAllowedRole()) {
+		case Any:
+			//fine
+			break;
+		case CounterNegotiator:
+			//the participant that is NOT the negotiator
+			break;
+		case Initiator:
+			//obvious
+			break;
+		case Owner:
+			//obvious
+			break;
+		case Renegotiator:
+			//negotiaor
+			break;
+		}
 		ConversationActImpl result = new ConversationActImpl();
 		result.setKind(kind);
 		InternalConversationForAction icfa = (InternalConversationForAction) previous.getConversationForAction();
-		icfa.setCurrentAct(result);
+		if(updatesCurrentAct(kind, icfa)){
+			icfa.setCurrentAct(result);
+			previous.setResponsePending(false);
+		}
 		result.setConversationForAction(icfa);
 		result.setFaultContentId(maybeCloneContent(previous.getFaultContentId()));
 		result.setFaultName(previous.getFaultName());
@@ -65,18 +88,45 @@ public abstract class AbstractConversationForActionCommand<T> extends AbstractTa
 		result.setResponsePending(true);
 		return result;
 	}
+
+	protected boolean updatesCurrentAct(ConversationActKind kind, InternalConversationForAction icfa) {
+		boolean updateCurrentAct=false;
+		if (kind == ConversationActKind.COUNTER_TO_INITIATOR || kind == ConversationActKind.COUNTER_TO_OWNER
+				|| kind == ConversationActKind.PROMISE) {
+			if (icfa.wasRequestedDirectly()) {
+				updateCurrentAct=true;
+			}
+		} else {
+			updateCurrentAct=true;
+		}
+		return updateCurrentAct;
+	}
+
+	protected void validatePreviousState(InternalConversationAct previous, ConversationActKind kind) {
+		boolean valid = false;
+		for (ConversationForActionState s : kind.getPrerequisiteState()) {
+			if (s == previous.getResultingConversationState()) {
+				valid = true;
+			}
+		}
+		if (!valid) {
+			throw new IllegalStateException("Previously the conversation was in the '" + previous.getResultingConversationState().name()
+					+ "' state, therefore the act '" + kind.name() + "' cannot be executed against it");
+		}
+	}
+
 	protected void acceptCommitment(ConversationAct accept) {
 		InternalConversationForAction cfa = (InternalConversationForAction) accept.getConversationForAction();
 		cfa.setCommitment(accept);
 		InternalTaskData itd = (InternalTaskData) cfa.getTaskData();
-		super.taskId=cfa.getId();
-		Map<String, Object> inputMap=Collections.<String,Object>singletonMap("key", getContentAsMap(accept.getInputContentId()));
+		super.taskId = cfa.getId();
+		Map<String, Object> inputMap = Collections.<String, Object> singletonMap("key", getContentAsMap(accept.getInputContentId()));
 		itd.setDocumentContentId(ensureContentIdPresent(cfa, itd.getDocumentContentId(), inputMap, "key"));
-		Map<String, Object> outputMap=Collections.<String,Object>singletonMap("key", getContentAsMap(accept.getOutputContentId()));
+		Map<String, Object> outputMap = Collections.<String, Object> singletonMap("key", getContentAsMap(accept.getOutputContentId()));
 		itd.setOutputContentId(ensureContentIdPresent(cfa, itd.getOutputContentId(), outputMap, "key"));
-		//TODO implement deadlines implied by dateOfCommencement and dateOfCompletion
+		// TODO implement deadlines implied by dateOfCommencement and
+		// dateOfCompletion
 	}
-
 
 	private long maybeCloneContent(long contentId) {
 		if (contentId >= 0) {
@@ -91,7 +141,7 @@ public abstract class AbstractConversationForActionCommand<T> extends AbstractTa
 		return -1;
 	}
 
-	protected long ensureContentIdPresent(ConversationForAction cfa,long contentId, Map<String, Object> input) {
+	protected long ensureContentIdPresent(ConversationForAction cfa, long contentId, Map<String, Object> input) {
 		Map<String, Object> map = Collections.<String, Object> singletonMap("key", input);
 		long ensureContentIdPresent = ensureContentIdPresent(cfa, contentId, map, "key");
 		return ensureContentIdPresent;
@@ -137,8 +187,12 @@ public abstract class AbstractConversationForActionCommand<T> extends AbstractTa
 	@SuppressWarnings("unchecked")
 	protected Map<String, Object> getContentAsMap(long contentId2) {
 		Content c = taskContext.getTaskContentService().getContentById(contentId2);
-		ContentMarshallerContext mc = taskContext.getTaskContentService().getMarshallerContext(getTaskById(taskId));
-		return (Map<String, Object>) ContentMarshallerHelper.unmarshall(c.getContent(), mc.getEnvironment());
+		if (c == null) {
+			return Collections.emptyMap();
+		} else {
+			ContentMarshallerContext mc = taskContext.getTaskContentService().getMarshallerContext(getTaskById(taskId));
+			return (Map<String, Object>) ContentMarshallerHelper.unmarshall(c.getContent(), mc.getEnvironment());
+		}
 	}
 
 }

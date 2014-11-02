@@ -68,6 +68,10 @@ public class ConversationForActionImpl extends PlannableTaskImpl implements Inte
 	public void setOutcome(ConversationAct outcome) {
 		this.outcome = (ConversationActImpl) outcome;
 	}
+	@Override
+	public boolean wasRequestedDirectly() {
+		return getRequest()!=null && getRequest().getOwner()!=null;
+	}
 	
 
 }

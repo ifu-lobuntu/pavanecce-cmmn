@@ -7,5 +7,6 @@ public interface ConversationForAction extends Task{
 	ConversationAct getCommitment();
 	ConversationAct getOutcome();
 	ConversationAct getCurrentAct();
+	boolean wasRequestedDirectly();
 	
 }

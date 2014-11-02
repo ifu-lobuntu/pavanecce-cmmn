@@ -29,7 +29,6 @@ public class AcceptCommand extends AbstractConversationForActionCommand<Void> {
 		accept.setResultingConversationState(ConversationForActionState.COMMITTED);
 		accept.setCommitted(true);
 		accept.setComment(comment);
-		previous.setResponsePending(false);
 		persist(accept);
 		acceptCommitment(accept);
 		((InternalConversationForAction) previous.getConversationForAction()).setConversationState(ConversationForActionState.COMMITTED);

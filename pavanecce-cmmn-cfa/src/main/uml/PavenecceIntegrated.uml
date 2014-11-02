@@ -472,6 +472,9 @@ more commitments</body>
               <transition xmi:type="uml:Transition" xmi:id="_9Wjy8D_UEeSm6PG4bcpj3A" name="Transition18" visibility="package" source="_zEZcIDotEeScHpOXWsRArw" target="_tSZLwCtjEeS1Ppi_M8XeJg">
                 <trigger xmi:type="uml:Trigger" xmi:id="_BYFusD_VEeSm6PG4bcpj3A" event="_y0F5wD_UEeSm6PG4bcpj3A"/>
               </transition>
+              <transition xmi:type="uml:Transition" xmi:id="_M5890GJPEeSmK5tcgWbnwg" name="Transition19" source="_zEZcITotEeScHpOXWsRArw" target="_tSZLwCtjEeS1Ppi_M8XeJg">
+                <trigger xmi:type="uml:Trigger" xmi:id="_QDndcGJPEeSmK5tcgWbnwg" name="" event="_y0F5wD_UEeSm6PG4bcpj3A"/>
+              </transition>
               <subvertex xmi:type="uml:Pseudostate" xmi:id="_tSZLvStjEeS1Ppi_M8XeJg" name="Initial0"/>
               <subvertex xmi:type="uml:State" xmi:id="_tSZLwCtjEeS1Ppi_M8XeJg" name="InProgress"/>
               <subvertex xmi:type="uml:State" xmi:id="_tSZLxCtjEeS1Ppi_M8XeJg" name="AwaitingAcceptance"/>
@@ -521,6 +524,9 @@ more commitments</body>
                     <body>committed=true</body>
                   </specification>
                 </ownedRule>
+              </transition>
+              <transition xmi:type="uml:Transition" xmi:id="_V8njEGJNEeSmK5tcgWbnwg" name="Transition9" source="_KGsTgDZaEeSP7-vK60zsxA" target="_8I_M8DZaEeSP7-vK60zsxA">
+                <trigger xmi:type="uml:Trigger" xmi:id="_cKhPwGJNEeSmK5tcgWbnwg" name="withdraw" event="_-XC9QCtUEeSDa8AcgulCaA"/>
               </transition>
               <subvertex xmi:type="uml:Pseudostate" xmi:id="_KGsTfTZaEeSP7-vK60zsxA" name="Initial0"/>
               <subvertex xmi:type="uml:State" xmi:id="_KGsTfjZaEeSP7-vK60zsxA" name="Requested"/>

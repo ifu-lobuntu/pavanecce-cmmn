@@ -21,13 +21,14 @@ import org.pavanecce.cmmn.cfa.api.ConversationAct;
 import org.pavanecce.cmmn.cfa.api.ConversationActKind;
 import org.pavanecce.cmmn.cfa.api.ConversationForAction;
 import org.pavanecce.cmmn.cfa.api.ConversationForActionState;
+import org.pavanecce.cmmn.cfa.api.InternalConversationAct;
 
-@Entity(name="ConversationActImpl")
-public class ConversationActImpl implements ConversationAct {
+@Entity(name = "ConversationActImpl")
+public class ConversationActImpl implements InternalConversationAct {
 
 	@Id
 	@GeneratedValue
-	Long id;
+	long id;
 
 	@ManyToOne
 	private ConversationForActionImpl conversationForAction;
@@ -53,6 +54,9 @@ public class ConversationActImpl implements ConversationAct {
 	@Basic
 	boolean isResponsePending;
 
+	@Basic
+	boolean isDispute;
+
 	@Enumerated
 	private ConversationForActionState resultingConversationState;
 
@@ -61,13 +65,13 @@ public class ConversationActImpl implements ConversationAct {
 	private boolean isCommitted;
 
 	@Column(name = "input_content_id")
-	private long inputContentId=-1;
+	private long inputContentId = -1;
 
 	@Column(name = "output_content_id")
-	private long outputContentId=-1;
+	private long outputContentId = -1;
 
 	@Column(name = "fault_content_id")
-	private long faultContentId=-1;
+	private long faultContentId = -1;
 
 	@Basic()
 	private String faultName;
@@ -119,7 +123,6 @@ public class ConversationActImpl implements ConversationAct {
 		this.renegotiator = (OrganizationalEntityImpl) renegotiator;
 	}
 
-
 	@Override
 	public OrganizationalEntityImpl getOwner() {
 		return owner;
@@ -129,13 +132,12 @@ public class ConversationActImpl implements ConversationAct {
 		this.owner = (OrganizationalEntityImpl) owner;
 	}
 
-
 	@Override
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -155,6 +157,7 @@ public class ConversationActImpl implements ConversationAct {
 		this.resultingConversationState = resultingConversationState;
 	}
 
+	@Override
 	public Date getDateOfCommencement() {
 		return dateOfCommencement;
 	}
@@ -163,6 +166,7 @@ public class ConversationActImpl implements ConversationAct {
 		this.dateOfCommencement = dateOfCommencement;
 	}
 
+	@Override
 	public Date getDateOfCompletion() {
 		return dateOfCompletion;
 	}
@@ -183,10 +187,11 @@ public class ConversationActImpl implements ConversationAct {
 		return previousStep;
 	}
 
-	public void setPreviousStep(ConversationActImpl previousStep) {
-		this.previousStep = previousStep;
+	public void setPreviousStep(InternalConversationAct previousStep) {
+		this.previousStep = (ConversationActImpl) previousStep;
 	}
 
+	@Override
 	public OrganizationalEntityImpl getAddressedTo() {
 		return addressedTo;
 	}
@@ -195,6 +200,7 @@ public class ConversationActImpl implements ConversationAct {
 		this.addressedTo = (OrganizationalEntityImpl) user;
 	}
 
+	@Override
 	public UserImpl getActor() {
 		return actor;
 	}
@@ -211,6 +217,7 @@ public class ConversationActImpl implements ConversationAct {
 		this.isResponsePending = responsePending;
 	}
 
+	@Override
 	public long getInputContentId() {
 		return inputContentId;
 	}
@@ -219,6 +226,7 @@ public class ConversationActImpl implements ConversationAct {
 		this.inputContentId = inputContentId;
 	}
 
+	@Override
 	public long getOutputContentId() {
 		return outputContentId;
 	}
@@ -227,6 +235,7 @@ public class ConversationActImpl implements ConversationAct {
 		this.outputContentId = outputContentId;
 	}
 
+	@Override
 	public long getFaultContentId() {
 		return faultContentId;
 	}
@@ -236,11 +245,25 @@ public class ConversationActImpl implements ConversationAct {
 	}
 
 	public void setConversationForAction(ConversationForAction cfa) {
-		this.conversationForAction=(ConversationForActionImpl) cfa;
+		this.conversationForAction = (ConversationForActionImpl) cfa;
 	}
 
 	public void setComment(String comment) {
-		this.comment=comment;
+		this.comment = comment;
+	}
+
+	@Override
+	public String getComment() {
+		return comment;
+	}
+
+	@Override
+	public boolean isDispute() {
+		return isDispute;
+	}
+
+	public void setDispute(boolean isDispute) {
+		this.isDispute = isDispute;
 	}
 
 }

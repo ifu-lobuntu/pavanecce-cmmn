@@ -46,26 +46,22 @@ public class ConversationForActionServiceImpl implements ConversationForActionSe
 
 	@Override
 	public void counterToInitiator(String userId, NegotiationStep request) {
-		// TODO Auto-generated method stub
-
+		taskService.execute(new CounterToInitiatorCommand(userId,request));
 	}
 
 	@Override
 	public void counterToOwner(String userId, NegotiationStep request) {
-		// TODO Auto-generated method stub
-
+		taskService.execute(new CounterToOwnerCommand(userId,request));
 	}
 
 	@Override
-	public void withdraw(String userId, long conversationActId, Map<String, Object> fault) {
-		// TODO Auto-generated method stub
-
+	public void withdraw(String userId, long conversationActId, Map<String, Object> fault, String comment) {
+		taskService.execute(new WithdrawCommand(userId,conversationActId, fault, comment));
 	}
 
 	@Override
-	public void reject(String userId, long conversationActId, Map<String, Object> fault) {
-		// TODO Auto-generated method stub
-
+	public void reject(String userId, long conversationActId, Map<String, Object> fault, String comment) {
+		taskService.execute(new RejectCommand(userId,conversationActId, fault, comment));
 	}
 
 	@Override
@@ -80,32 +76,24 @@ public class ConversationForActionServiceImpl implements ConversationForActionSe
 
 	@Override
 	public void renegotiate(String userId, NegotiationStep request) {
-		// TODO Auto-generated method stub
-
+		taskService.execute(new RenegotiateCommand(userId,request));
 	}
 
 	@Override
 	public void acceptNewTerms(String userId, long conversationActId, String comment) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void counterToRenegotiator(String userId, NegotiationStep request) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void counterFromRenegotiator(String userId, NegotiationStep request) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public void renege(String userId, long conversationActId, Map<String, Object> fault) {
-		// TODO Auto-generated method stub
-
+	public void renege(String userId, long conversationActId, Map<String, Object> fault, String comment) {
+		taskService.execute(new RenegeCommand(userId, conversationActId, fault, comment));
 	}
 
 	@Override
@@ -114,9 +102,8 @@ public class ConversationForActionServiceImpl implements ConversationForActionSe
 	}
 
 	@Override
-	public void declareInadequate(String userId, long conversationActId, String comment) {
-		// TODO Auto-generated method stub
-
+	public void declareInadequate(String userId, long conversationActId, Map<String, Object> fault, String comment) {
+		taskService.execute(new DeclareInadequateCommand(userId, conversationActId, fault, comment));
 	}
 
 	@Override
@@ -137,5 +124,10 @@ public class ConversationForActionServiceImpl implements ConversationForActionSe
 	@Override
 	public List<ConversationForActionSummary> getInitiatedCommitments(String userId) {
 		return taskService.execute(new GetInitiatedCommitmentsCommand(userId));
+	}
+
+	@Override
+	public List<ConversationActSummary> getDisputes(String userId) {
+		return taskService.execute(new GetDisputesCommand(userId));
 	}
 }

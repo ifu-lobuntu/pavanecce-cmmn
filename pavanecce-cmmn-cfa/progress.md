@@ -8,29 +8,31 @@ ConversationForAction workflow:
 - start
 - get initiated commitments
 - get owned commitments
+- counterToInitiator
+- counterToOwner
+- renegotiate
+- renege
+- withdraw
 
 #2. To implement
 
 ConversationForAction workflow: 
 
 - add conversation (not direct request)
-- counterToInitiator
-- counterToOwner
-- renegotiate
 - counterToRenegotiator
 - counterFromRenegotiator
-- renege
-- withdraw
 - accept new terms
+- allow inputs and outputs to be removed (currently only additive, maybe use null values but keep the keys) 
+- null dates should not override previous agreed dates
+- implement validation for conversationForActionRole (Any, Initiator,Owner,etc.)
 
-
-Introduce custom state transitions for CMMN planning elements:
-
-Implement ContractService
+Specify ContractService
 
 - prepare contract
 - commit to contract
 - consummate contract
+
+Introduce custom state transitions for CMMN planning elements ( Do this in a separate project):
 
 Add a 'correlation key' parameter, the central product/offering the initiator is interested in 
 - for use in VDML
@@ -43,7 +45,6 @@ Milestone with cost breakdown (move to REA)
 - issue payment automatically when milestone achieved
 - a further refinement could even freeze funds on commitment
 - issue data to VDML db for tasks whose completion are entry criteria ???? what did I mean here
-
 
 Calendaring
 - schedule tasks due date on Google?

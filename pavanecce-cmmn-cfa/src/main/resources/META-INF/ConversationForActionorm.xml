@@ -125,7 +125,46 @@
 			t.renegotiator as renegotiator
 			where
 			t.isResponsePending = true and
-			t.addressedTo.id = :userId
+			t.addressedTo.id = :userId 
+			order by t.id DESC
+		</query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-query>
+
+	<named-query name="ConversationForActionGetDisputes">
+		<query>
+			select distinct
+			new
+			org.pavanecce.cmmn.cfa.impl.ConversationActSummaryImpl(
+			t.conversationForAction.id,
+			t.conversationForAction.name,
+			t.conversationForAction.description,
+			t.conversationForAction.taskData.status,
+			t.conversationForAction.priority,
+			t.owner,
+			t.conversationForAction.peopleAssignments.taskInitiator,
+			t.conversationForAction.taskData.createdOn,
+			t.conversationForAction.taskData.activationTime,
+			t.conversationForAction.taskData.expirationTime,
+			t.conversationForAction.taskData.processId,
+			t.conversationForAction.taskData.processInstanceId,
+			t.conversationForAction.taskData.parentId,
+			t.conversationForAction.taskData.deploymentId,
+			t.inputContentId,
+			t.outputContentId,
+			t.faultContentId,
+			t.kind,
+			t.resultingConversationState,
+			renegotiator,
+			t.id,
+			t.dateOfCommencement,
+			t.dateOfCompletion )
+			from
+			ConversationActImpl t left outer join
+			t.renegotiator as renegotiator
+			where
+			t.isDispute = true and
+			(t.addressedTo.id = :userId or t.actor.id = :userId) 
 			order by t.id DESC
 		</query>
 		<!-- hint name="org.hibernate.timeout" value="200"/ -->

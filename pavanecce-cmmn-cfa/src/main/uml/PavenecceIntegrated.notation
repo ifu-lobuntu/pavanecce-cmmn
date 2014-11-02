@@ -1253,7 +1253,7 @@
                 <layoutConstraint xmi:type="notation:Location" xmi:id="_tSaZzStjEeS1Ppi_M8XeJg" x="25" y="-10"/>
               </children>
               <element xmi:type="uml:Pseudostate" href="PavenecceIntegrated.uml#_tSZLvStjEeS1Ppi_M8XeJg"/>
-              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_tSaZzitjEeS1Ppi_M8XeJg" x="217" y="53"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_tSaZzitjEeS1Ppi_M8XeJg" x="188" y="69"/>
             </children>
             <children xmi:type="notation:Shape" xmi:id="_tSaZ3ytjEeS1Ppi_M8XeJg" type="6000">
               <children xmi:type="notation:DecorationNode" xmi:id="_tSaZ4CtjEeS1Ppi_M8XeJg" type="6001"/>
@@ -1536,6 +1536,20 @@
       <element xmi:type="uml:Transition" href="PavenecceIntegrated.uml#_9Wjy8D_UEeSm6PG4bcpj3A"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_9YPN8j_UEeSm6PG4bcpj3A" points="[-8, -19, 0, 162]$[-53, -137, -45, 44]$[-21, -169, -13, 12]"/>
       <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_9YXJwD_UEeSm6PG4bcpj3A" id="(0.20634920634920634,0.65)"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_M6ABIGJPEeSmK5tcgWbnwg" type="7000" source="_1pBVADotEeScHpOXWsRArw" target="_tSaZ3ytjEeS1Ppi_M8XeJg">
+      <children xmi:type="notation:DecorationNode" xmi:id="_M6AoMGJPEeSmK5tcgWbnwg" visible="false" type="7001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_M6AoMWJPEeSmK5tcgWbnwg"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_M6AoMmJPEeSmK5tcgWbnwg" type="7002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_M6AoM2JPEeSmK5tcgWbnwg"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_M6AoNGJPEeSmK5tcgWbnwg" type="7003">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_M6AoNWJPEeSmK5tcgWbnwg" y="60"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_M6ABIWJPEeSmK5tcgWbnwg"/>
+      <element xmi:type="uml:Transition" href="PavenecceIntegrated.uml#_M5890GJPEeSmK5tcgWbnwg"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_M6ABImJPEeSmK5tcgWbnwg" points="[-3, -21, -8, 306]$[-3, -347, -8, -20]"/>
     </edges>
   </notation:Diagram>
   <notation:Diagram xmi:id="_0MF1ECtoEeS_adxi5tK3xg" type="PapyrusUMLClassDiagram" name="Contract" measurementUnit="Pixel">
@@ -6591,6 +6605,20 @@
       <styles xmi:type="notation:FontStyle" xmi:id="_Qw5sITZbEeSP7-vK60zsxA"/>
       <element xmi:type="uml:Transition" href="PavenecceIntegrated.uml#_Qw2o0DZbEeSP7-vK60zsxA"/>
       <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Qw5sIjZbEeSP7-vK60zsxA" points="[-4, 20, 64, -320]$[-66, 329, 2, -11]"/>
+    </edges>
+    <edges xmi:type="notation:Connector" xmi:id="_WEXw4GJNEeSmK5tcgWbnwg" type="7000" source="_KGvWzzZaEeSP7-vK60zsxA" target="_8JDeYDZaEeSP7-vK60zsxA">
+      <children xmi:type="notation:DecorationNode" xmi:id="_WEaNIGJNEeSmK5tcgWbnwg" visible="false" type="7001">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_WEaNIWJNEeSmK5tcgWbnwg"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_WEaNImJNEeSmK5tcgWbnwg" type="7002">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_WEa0MGJNEeSmK5tcgWbnwg"/>
+      </children>
+      <children xmi:type="notation:DecorationNode" xmi:id="_WEa0MWJNEeSmK5tcgWbnwg" type="7003">
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_WEa0MmJNEeSmK5tcgWbnwg" y="60"/>
+      </children>
+      <styles xmi:type="notation:FontStyle" xmi:id="_WEXw4WJNEeSmK5tcgWbnwg"/>
+      <element xmi:type="uml:Transition" href="PavenecceIntegrated.uml#_V8njEGJNEeSmK5tcgWbnwg"/>
+      <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_WEXw4mJNEeSmK5tcgWbnwg" points="[-24, 20, 388, -332]$[-411, 341, 1, -11]"/>
     </edges>
   </notation:Diagram>
 </xmi:XMI>
