@@ -5,11 +5,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Date;
 
-import javax.ws.rs.GET;
-
 import org.kie.api.task.model.OrganizationalEntity;
 import org.kie.api.task.model.Status;
-import org.kie.api.task.model.User;
 import org.pavanecce.cmmn.cfa.api.ConversationActKind;
 import org.pavanecce.cmmn.cfa.api.ConversationActSummary;
 import org.pavanecce.cmmn.cfa.api.ConversationForActionState;

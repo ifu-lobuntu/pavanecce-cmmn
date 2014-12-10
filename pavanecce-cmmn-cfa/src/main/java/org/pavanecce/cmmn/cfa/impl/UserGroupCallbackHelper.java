@@ -44,8 +44,8 @@ public class UserGroupCallbackHelper extends UserGroupCallbackTaskCommand<Void> 
 	}
 
 	@Override
-	public  void doCallbackGroupsOperation(String userId, List<String> groupIds, TaskContext context) {
-		super.doCallbackGroupsOperation(userId, groupIds, context);
+	public  List<String> doCallbackGroupsOperation(String userId, List<String> groupIds, TaskContext context) {
+		return super.doCallbackGroupsOperation(userId, groupIds, context);
 	}
 
 	@Override
