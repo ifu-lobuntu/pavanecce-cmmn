@@ -1451,6 +1451,33 @@ more commitments</body>
         </ownedEnd>
       </packagedElement>
     </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_bENwINXqEeSM4KEhVL516g" name="commerce">
+      <packagedElement xmi:type="uml:Class" xmi:id="_Tg2HgNX5EeSM4KEhVL516g" name="ShoppingBasket">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_YeAlENX5EeSM4KEhVL516g" name="lineItem" type="_Vj4WQNX5EeSM4KEhVL516g" aggregation="composite" association="_YeCaQNX5EeSM4KEhVL516g">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YeAlEdX5EeSM4KEhVL516g"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YeAlEtX5EeSM4KEhVL516g" value="*"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_Vj4WQNX5EeSM4KEhVL516g" name="LineItem">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_cAChYNX5EeSM4KEhVL516g" name="store" type="_Cy_gICuBEeS_adxi5tK3xg" association="_cAks4NX5EeSM4KEhVL516g">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cAChYdX5EeSM4KEhVL516g" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cAChYtX5EeSM4KEhVL516g" value="1"/>
+        </ownedAttribute>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_YeCaQNX5EeSM4KEhVL516g" memberEnd="_YeCaQdX5EeSM4KEhVL516g _YeAlENX5EeSM4KEhVL516g">
+        <ownedEnd xmi:type="uml:Property" xmi:id="_YeCaQdX5EeSM4KEhVL516g" name="shoppingBasket" type="_Tg2HgNX5EeSM4KEhVL516g" association="_YeCaQNX5EeSM4KEhVL516g">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_YeCaQtX5EeSM4KEhVL516g" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_YeCaQ9X5EeSM4KEhVL516g" value="1"/>
+        </ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_cAks4NX5EeSM4KEhVL516g" memberEnd="_cAks4dX5EeSM4KEhVL516g _cAChYNX5EeSM4KEhVL516g">
+        <name xsi:nil="true"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="_cAks4dX5EeSM4KEhVL516g" name="lineItem" type="_Vj4WQNX5EeSM4KEhVL516g" association="_cAks4NX5EeSM4KEhVL516g">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cAks4tX5EeSM4KEhVL516g" value="1"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cAks49X5EeSM4KEhVL516g" value="1"/>
+        </ownedEnd>
+      </packagedElement>
+    </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_uFJpACuJEeSRZ5rhtJhHwQ">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_uFZgoCuJEeSRZ5rhtJhHwQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
         <references xmi:type="ecore:EPackage" href="pathmap://PAPYRUS_ACTIONLANGUAGE_PROFILE/ActionLanguage-Profile.profile.uml#_sYse0YZLEeKyw49uR6nx3g"/>
